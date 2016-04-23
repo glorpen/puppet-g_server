@@ -1,0 +1,6 @@
+class g_server (
+  
+) {
+
+
+}
