@@ -9,7 +9,8 @@ class g_server::services (
   $samba = false,
   $rsync = false,
   $dnsmasq = false,
-  $nginx = false
+  $nginx = false,
+  $avahi = false
 ){
 
   if $fail2ban {
@@ -147,6 +148,14 @@ class g_server::services (
 	      iniface  => $iface
 	    }
 	  }
+	  if $avahi {
+      firewall { "021.${iface} Allow internal avahi":
+        dport   => 5353,
+        proto    => udp,
+        action   => accept,
+        iniface  => $iface
+      }
+    }
   }
 
 }
