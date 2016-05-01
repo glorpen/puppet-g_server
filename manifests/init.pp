@@ -1,6 +1,7 @@
 class g_server (
   $external_iface = undef,
-  $internal_ifaces = []
+  $internal_ifaces = [],
+  $certs = false
 ) {
   
   if ! $external_iface {
@@ -8,5 +9,9 @@ class g_server (
   }
   
   class { 'g_server::firewall': }
+  
+  if $certs {
+    class { 'g_server::certs': }
+  }
 
 }
