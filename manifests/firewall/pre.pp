@@ -22,5 +22,17 @@ class g_server::firewall::pre {
     proto  => 'all',
     state  => ['RELATED', 'ESTABLISHED'],
     action => 'accept',
+  }->
+  # for TOR but looks good for others too
+  firewall { '004 drop invalid packets':
+    proto => 'all',
+    state => ['INVALID'],
+    action => 'drop'
+  }->
+  firewall { '005 drop invalid packets':
+    proto => 'all',
+    ctstate => ['INVALID'],
+    action => 'drop'
   }
+  
 }
