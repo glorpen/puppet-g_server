@@ -6,6 +6,10 @@ class g_server::firewall(
 	}
 	resources { 'firewallchain':
 	  purge => true,
+	  ignore => [
+	    # ignore the fail2ban rules
+	    '-j f2b-'
+    ]
 	}
 	Firewall {
 	  before  => Class['g_server::firewall::post'],
