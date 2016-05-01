@@ -1,4 +1,5 @@
 class g_server::rocketchat (
+  $instances = {}
 ){
   package_keywords { 'net-libs/http-parser':
 	  keywords => ['~amd64'],
@@ -9,4 +10,10 @@ class g_server::rocketchat (
 	package { 'net-im/rocketchat-server':
 	  ensure   => '0.28.0'
 	}
+	
+	g_server::rocketchat::instance {
+	   'rocketchat-instances-aggregator':
+	       instances => $instances
+	}
+	
 }
