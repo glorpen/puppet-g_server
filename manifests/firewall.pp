@@ -2,10 +2,10 @@ class g_server::firewall(
 ){
 
 	resources { 'firewall':
-	  purge => true,
+	  #purge => true,
 	}
 	resources { 'firewallchain':
-	  purge => true,
+	  #purge => true,
 	}
 	Firewall {
 	  before  => Class['g_server::firewall::post'],
