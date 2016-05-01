@@ -9,9 +9,13 @@ define g_server::rocketchat::instance(
   file { "/etc/init.d/rocketchat.${title}":
     ensure => 'link',
     target => '/etc/init.d/rocketchat'
-  }
+  }~>
   file { "/etc/conf.d/rocketchat.${title}":
     content => template('g_server/rocketchat/instance.conf.erb')
+  }~>
+  service { "rocketchat.${title}":
+    ensure => "running",
+    enable => true
   }
   
   #firewall for internal port
