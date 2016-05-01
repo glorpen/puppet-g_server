@@ -8,5 +8,6 @@ class g_server::rocketchat (
 	}->
 	package { 'net-im/rocketchat-server':
 	  ensure   => '0.28.0'
-	}
+	}~>
+	G_server::Rocketchat::Instance<| |>
 }
