@@ -6,10 +6,6 @@ class g_server::firewall(
 	}
 	resources { 'firewallchain':
 	  purge => true,
-	  ignore => [
-	    # ignore the fail2ban rules
-	    '-j f2b-'
-    ]
 	}
 	Firewall {
 	  before  => Class['g_server::firewall::post'],
@@ -25,5 +21,13 @@ class g_server::firewall(
 	  proto    => tcp,
 	  action   => accept
 	}
+	
+	#register f2b chains
+	firewallchain { 'f2b-postfix:filter:IPv4':
+	   ensure => present
+  }
+  firewallchain { 'f2b-sshd:filter:IPv4':
+    ensure => present
+  }
 
 }
