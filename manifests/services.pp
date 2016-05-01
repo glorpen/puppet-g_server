@@ -8,7 +8,8 @@ class g_server::services (
   $cups = false,
   $samba = false,
   $rsync = false,
-  $dnsmasq = false
+  $dnsmasq = false,
+  $nginx = false
 ){
 
   if $fail2ban {
