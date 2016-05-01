@@ -119,9 +119,15 @@ class g_server::services (
   }
   
   if $dnsmasq {
-    firewall { '019 Allow internal dnsmasq':
+    firewall { '019.tcp Allow internal dnsmasq':
+      dport   => 53,
+      proto    => tcp,
+      action   => accept,
+      iniface  => $::g_server::internal_ifaces
+    }
+    firewall { '019.udp Allow internal dnsmasq':
       dport   => [53, 67],
-      proto    => all,
+      proto    => udp,
       action   => accept,
       iniface  => $::g_server::internal_ifaces
     }
