@@ -4,7 +4,7 @@ class g_server (
 ) {
   
   if ! $external_iface {
-    fail("No external iface given");
+    fail("No external iface given")
   }
   
   class { 'g_server::firewall': }
