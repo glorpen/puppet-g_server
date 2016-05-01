@@ -10,4 +10,6 @@ class g_server::rocketchat (
 	  ensure   => '0.28.0'
 	}~>
 	G_server::Rocketchat::Instance<| |>
+	
+	ensure_packages(["media-gfx/imagemagick"])
 }
