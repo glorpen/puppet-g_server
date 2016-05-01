@@ -22,7 +22,7 @@ class g_server::firewall(
 	  action   => accept
 	}
 	
-	#register f2b chains
+	#todo temporary fix - register f2b chains
 	firewallchain { 'f2b-postfix:filter:IPv4':
 	   ensure => present
   }
