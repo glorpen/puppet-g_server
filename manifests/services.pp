@@ -34,7 +34,7 @@ class g_server::services (
     #iptables -A OUTPUT -p udp --sport 51413 -j ACCEPT
     #TODO check
     firewall { '010 Allow Transmission daemon':
-      dport    => 51413,
+      port    => 51413,
       proto    => all,
       action   => accept,
       iniface  => $::g_server::external_iface
