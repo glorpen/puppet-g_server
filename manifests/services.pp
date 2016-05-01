@@ -37,110 +37,113 @@ class g_server::services (
     }
   }
   
-  $::g_server::internal_ifaces.each |$internal_iface| {
-  
-	  if $transmission {
-	    #iptables -A INPUT -m state --state RELATED,ESTABLISHED -p udp --dport 51413 -j ACCEPT
-	    #iptables -A OUTPUT -p udp --sport 51413 -j ACCEPT
-	    #TODO check
-	    firewall { '010.tcp Allow Transmission daemon':
-	      dport    => 51413,
-	      proto    => tcp,
-	      action   => accept,
-	      iniface  => $::g_server::external_iface
-	    }
-	    firewall { '010.udp Allow Transmission daemon':
-	      dport    => 51413,
-	      proto    => udp,
-	      action   => accept,
-	      iniface  => $::g_server::external_iface
-	    }
-	    firewall { '011 Allow Transmission daemon web interface':
+  if $transmission {
+    #iptables -A INPUT -m state --state RELATED,ESTABLISHED -p udp --dport 51413 -j ACCEPT
+    #iptables -A OUTPUT -p udp --sport 51413 -j ACCEPT
+    #TODO check
+    firewall { '010.udp Allow Transmission daemon':
+      dport    => 51413,
+      proto    => udp,
+      action   => accept,
+      iniface  => $::g_server::external_iface
+    }
+    firewall { "010.tcp Allow Transmission daemon":
+      dport    => 51413,
+      proto    => tcp,
+      action   => accept,
+      iniface  => $::g_server::external_iface
+    }
+    
+    $::g_server::internal_ifaces.each |$iface| {
+	    firewall { '011.${iface} Allow Transmission daemon web interface':
 	      dport     => 9091,
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
-	  }
+    }
+  }
+  
+  $::g_server::internal_ifaces.each |$iface| {
 	  
 	  if $tor {
-	    firewall { '013 Allow internal tor':
+	    firewall { '013.${iface} Allow internal tor':
 	      dport   => 9050,
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $ntp {
-	    firewall { '014 Allow internal NTP':
+	    firewall { '014.${iface} Allow internal NTP':
 	      dport   => 123,
 	      proto    => udp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $cups {
-	    firewall { '015.tcp Allow internal Cups':
+	    firewall { '015.tcp.${iface} Allow internal Cups':
 	      dport   => 631,
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
-	    firewall { '015.udp Allow internal Cups':
+	    firewall { '015.udp.${iface} Allow internal Cups':
 	      dport   => 631,
 	      proto    => udp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $samba {
-	    firewall { '016 Allow internal SMBD':
+	    firewall { '016.${iface} Allow internal SMBD':
 	      dport   => [139, 445],
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
-	    firewall { '017 Allow internal SMBD':
+	    firewall { '017.${iface} Allow internal SMBD':
 	      dport   => [137, 138],
 	      proto    => udp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $rsync {
-	    firewall { '018 Allow internal rsync':
+	    firewall { '018.${iface} Allow internal rsync':
 	      dport   => 873,
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $dnsmasq {
-	    firewall { '019.tcp Allow internal dnsmasq':
+	    firewall { '019.tcp.${iface} Allow internal dnsmasq':
 	      dport   => 53,
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
-	    firewall { '019.udp Allow internal dnsmasq':
+	    firewall { '019.udp.${iface} Allow internal dnsmasq':
 	      dport   => [53, 67],
 	      proto    => udp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
 	  
 	  if $nginx {
-	    firewall { '020 Allow internal nginx':
+	    firewall { '020.${iface} Allow internal nginx':
 	      dport   => [80, 443],
 	      proto    => tcp,
 	      action   => accept,
-	      iniface  => $::g_server::internal_ifaces
+	      iniface  => $iface
 	    }
 	  }
   }
