@@ -9,8 +9,8 @@ class g_server::firewall(
 	}
 	
 	Firewall {
-	  before  => Class['my_fw::post'],
-	  require => Class['my_fw::pre'],
+	  before  => Class['g_server::firewall::post'],
+	  require => Class['g_server::firewall::pre'],
 	}
 	
 	class { 'firewall': }
