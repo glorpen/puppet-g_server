@@ -80,9 +80,15 @@ class g_server::services (
   }
   
   if $cups {
-    firewall { '015 Allow internal Cups':
+    firewall { '015.tcp Allow internal Cups':
       dport   => 631,
-      proto    => all,
+      proto    => tcp,
+      action   => accept,
+      iniface  => $::g_server::internal_ifaces
+    }
+    firewall { '015.udp Allow internal Cups':
+      dport   => 631,
+      proto    => udp,
       action   => accept,
       iniface  => $::g_server::internal_ifaces
     }
