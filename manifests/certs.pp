@@ -63,6 +63,8 @@ class g_server::certs(
     keywords => ['~amd64']
   }
 
+  ensure_packages(['app-crypt/letsencrypt'])
+
   Package_keywords<| target == 'puppet-certs' |>
-  ->ensure_packages(['app-crypt/letsencrypt'])
+  ->Package['app-crypt/letsencrypt']
 }
