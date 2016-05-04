@@ -67,4 +67,9 @@ class g_server::certs(
 
   Package_keywords<| target == 'puppet-certs' |>
   ->Package['app-crypt/letsencrypt']
+  
+  file{ "/var/www/letsencrypt":
+    ensure => "directory",
+    mode => 0755
+  }
 }
