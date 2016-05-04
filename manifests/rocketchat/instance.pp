@@ -29,7 +29,9 @@ define g_server::rocketchat::instance(
   #nginx proxy
   
   nginx::resource::vhost { $domain:
-	  #ssl => true,
+	  ssl => true,
+	  ssl_cert => "/etc/letsencrypt/live/${domain}/cert.pem",
+    ssl_key => "/etc/letsencrypt/live/${domain}/privkey.pem",
 	  proxy       => "http://localhost:${internal_port}",
     location_cfg_append => {
       proxy_http_version => '1.1',
