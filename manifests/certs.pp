@@ -72,6 +72,7 @@ class g_server::certs(
     ensure => "directory",
     mode => "a=rx,u+w"
   }
+  ->Nginx::Resource::Location['localhost-letsencrypt']
 
 	class { 'letsencrypt': }
 }
