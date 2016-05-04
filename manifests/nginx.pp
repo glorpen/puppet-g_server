@@ -22,7 +22,7 @@ class g_server::nginx(
   }
   
   if $letsencrypt {
-	  nginx::vhost { 'localhost':
+	  nginx::resource::vhost { 'localhost':
 	    ensure => present,
 	    listen_options => 'default_server',
 	    ssl => false,
