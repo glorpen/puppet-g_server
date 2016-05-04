@@ -1,7 +1,7 @@
 class g_server (
   $external_iface = undef,
   $internal_ifaces = [],
-  $certs = false
+  $nginx = false
 ) {
   
   if ! $external_iface {
@@ -10,8 +10,8 @@ class g_server (
   
   class { 'g_server::firewall': }
   
-  if $certs {
-    class { 'g_server::certs': }
+  if $nginx {
+    class { 'g_server::nginx': }
   }
 
 }
