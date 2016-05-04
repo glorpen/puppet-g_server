@@ -70,7 +70,7 @@ class g_server::certs(
   
   file{ "/var/www/letsencrypt":
     ensure => "directory",
-    mode => "a=r,ug+x,u+w"
+    mode => "a=rx,u+w"
   }
 
 	class { 'letsencrypt': }
