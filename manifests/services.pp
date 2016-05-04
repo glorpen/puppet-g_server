@@ -46,6 +46,14 @@ class g_server::services (
       action   => accept,
       iniface  => $::g_server::external_iface
     }
+    
+    nginx::vhost { 'localhost':
+      ensure => present,
+      listen_options => 'default_server',
+      ssl => false,
+      www_root => '/var/www/localhost',
+      try_files => ['$uri', '/var/www/letsencrypt/$host/$uri']
+    }
   }
   
   if $transmission {

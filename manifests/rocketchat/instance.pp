@@ -28,31 +28,6 @@ define g_server::rocketchat::instance(
   
   #nginx proxy
   
-  nginx::resource::vhost { $domain:
-	  ssl => true,
-	  ssl_cert => "/etc/letsencrypt/live/${domain}/cert.pem",
-    ssl_key => "/etc/letsencrypt/live/${domain}/privkey.pem",
-    
-    ssl_stapling => true,
-    ssl_stapling_verify => true,
-    ssl_trusted_cert => "/etc/letsencrypt/live/${domain}/fullchain.pem",
-    
-	  proxy       => "http://localhost:${internal_port}",
-    location_cfg_append => {
-      proxy_http_version => '1.1',
-      proxy_set_header => 'Upgrade $http_upgrade',
-      proxy_set_header => 'Connection "upgrade"',
-      proxy_set_header => 'Host $http_host',
-
-      proxy_set_header => 'X-Real-IP $remote_addr',
-      proxy_set_header => 'X-Forward-For $proxy_add_x_forwarded_for',
-      proxy_set_header => 'X-Forward-Proto http',
-      proxy_set_header => 'X-Nginx-Proxy true',
-
-      proxy_redirect => 'off'
-    }
-	}
-	
 	file{ "/var/www/letsencrypt/${domain}":
     ensure => "directory",
     mode => "a=rx,u+w"
@@ -68,5 +43,29 @@ define g_server::rocketchat::instance(
 	  domains => [$domain],
 	  plugin  => 'webroot',
 	  webroot_paths => ["/var/www/letsencrypt/${domain}"]
-	}
+	}->
+  nginx::resource::vhost { $domain:
+    ssl => true,
+    ssl_cert => "/etc/letsencrypt/live/${domain}/cert.pem",
+    ssl_key => "/etc/letsencrypt/live/${domain}/privkey.pem",
+    
+    ssl_stapling => true,
+    ssl_stapling_verify => true,
+    ssl_trusted_cert => "/etc/letsencrypt/live/${domain}/fullchain.pem",
+    
+    proxy       => "http://localhost:${internal_port}",
+    location_cfg_append => {
+      proxy_http_version => '1.1',
+      proxy_set_header => 'Upgrade $http_upgrade',
+      proxy_set_header => 'Connection "upgrade"',
+      proxy_set_header => 'Host $http_host',
+
+      proxy_set_header => 'X-Real-IP $remote_addr',
+      proxy_set_header => 'X-Forward-For $proxy_add_x_forwarded_for',
+      proxy_set_header => 'X-Forward-Proto http',
+      proxy_set_header => 'X-Nginx-Proxy true',
+
+      proxy_redirect => 'off'
+    }
+  }
 }
