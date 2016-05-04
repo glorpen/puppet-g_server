@@ -72,4 +72,6 @@ class g_server::certs(
     ensure => "directory",
     mode => "a=r,ug+X,u+w"
   }
+
+	class { 'letsencrypt': }
 }
