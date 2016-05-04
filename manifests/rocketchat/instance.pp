@@ -60,6 +60,6 @@ define g_server::rocketchat::instance(
   letsencrypt::certonly { $domain:
 	  domains => [$domain],
 	  plugin  => 'webroot',
-	  webroot_paths => "/var/www/letsencrypt/${domain}"
+	  webroot_paths => ["/var/www/letsencrypt/${domain}"]
 	}
 }
