@@ -48,7 +48,7 @@ define g_server::rocketchat::instance(
 	
 	file{ "/var/www/letsencrypt/${domain}":
     ensure => "directory",
-    mode => 0755
+    mode => "a=r,ug+X,u+w"
 	}->
   nginx::resource::location { "${domain}_letsencrypt":
     ensure          => present,
