@@ -21,14 +21,18 @@ class g_server::nginx(
     }
   }
   
+  nginx::resource::vhost { 'localhost':
+    ensure => present,
+    listen_options => 'default_server',
+    ssl => false,
+    www_root => '/var/www/localhost',
+  }
+  
   if $letsencrypt {
-	  nginx::resource::vhost { 'localhost':
-	    ensure => present,
-	    listen_options => 'default_server',
-	    ssl => false,
-	    www_root => '/var/www/localhost',
-	    try_files => ['$uri', '/var/www/letsencrypt/$host/$uri']
-	  }
+	  nginx::resource::location { 'localhost-letsencrypt':
+	    location => '/.well-known',
+	    www_root => '/var/www/letsencrypt/$host'
+    }
 	  
 	  class { 'g_server::certs': }
   }
