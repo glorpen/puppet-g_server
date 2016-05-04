@@ -29,7 +29,8 @@ define g_server::rocketchat::instance(
   #nginx proxy
   
   nginx::resource::vhost { $domain:
-	  listen_port => 80,
+	  listen_port => [80, 443],
+	  #ssl => true,
 	  proxy       => "http://localhost:${internal_port}",
     location_cfg_append => {
       proxy_http_version => '1.1',
@@ -45,7 +46,18 @@ define g_server::rocketchat::instance(
       proxy_redirect => 'off'
     }
 	}
+	
+  nginx::resource::location { "${domain}_letsencrypt":
+    ensure          => present,
+    ssl             => false,
+    vhost           => "${domain}",
+    location => "/.well-known",
+    www_root => "/var/www/${domain}-letsencrypt/.well-known"
+  }
   
-  #letsencrypt ssl
-  #run service
+  #letsencrypt::certonly { $domain:
+	#  domains => [$domain],
+	#  plugin  => 'webroot',
+	#  webroot_paths => "/var/www/${domain}"
+	#}
 }
