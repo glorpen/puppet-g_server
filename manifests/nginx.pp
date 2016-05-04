@@ -15,7 +15,7 @@ class g_server::nginx(
   $::g_server::internal_ifaces.each |$iface| {
     firewall { "020.${iface} Allow internal nginx":
       dport   => [80, 443],
-      proto    => 'all',
+      proto    => tcp,
       action   => accept,
       iniface  => $iface
     }
