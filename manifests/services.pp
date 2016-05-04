@@ -39,6 +39,15 @@ class g_server::services (
     }
   }
   
+  if $nginx {
+    firewall { "020.${iface} Allow external nginx":
+      dport   => [80, 443],
+      proto    => tcp,
+      action   => accept,
+      iniface  => $::g_server::external_iface
+    }
+  }
+  
   if $transmission {
     #iptables -A INPUT -m state --state RELATED,ESTABLISHED -p udp --dport 51413 -j ACCEPT
     #iptables -A OUTPUT -p udp --sport 51413 -j ACCEPT
