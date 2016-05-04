@@ -29,7 +29,6 @@ define g_server::rocketchat::instance(
   #nginx proxy
   
   nginx::resource::vhost { $domain:
-	  listen_port => [80, 443],
 	  #ssl => true,
 	  proxy       => "http://localhost:${internal_port}",
     location_cfg_append => {
