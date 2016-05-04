@@ -9,7 +9,6 @@ class g_server::services (
   $samba = false,
   $rsync = false,
   $dnsmasq = false,
-  $nginx = false,
   $avahi = false
 ){
 
@@ -36,23 +35,6 @@ class g_server::services (
       dport     => 8140,
       proto    => tcp,
       action   => accept
-    }
-  }
-  
-  if $nginx {
-    firewall { "020.${iface} Allow external nginx":
-      dport   => [80, 443],
-      proto    => tcp,
-      action   => accept,
-      iniface  => $::g_server::external_iface
-    }
-    
-    nginx::vhost { 'localhost':
-      ensure => present,
-      listen_options => 'default_server',
-      ssl => false,
-      www_root => '/var/www/localhost',
-      try_files => ['$uri', '/var/www/letsencrypt/$host/$uri']
     }
   }
   
@@ -157,14 +139,6 @@ class g_server::services (
 	    }
 	  }
 	  
-	  if $nginx {
-	    firewall { "020.${iface} Allow internal nginx":
-	      dport   => [80, 443],
-	      proto    => tcp,
-	      action   => accept,
-	      iniface  => $iface
-	    }
-	  }
 	  if $avahi {
       firewall { "021.${iface} Allow internal avahi":
         dport   => 5353,

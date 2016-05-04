@@ -28,22 +28,7 @@ define g_server::rocketchat::instance(
   
   #nginx proxy
   
-	file{ "/var/www/letsencrypt/${domain}":
-    ensure => "directory",
-    mode => "a=rx,u+w"
-	}->
-  nginx::resource::location { "${domain}_letsencrypt":
-    ensure          => present,
-    ssl             => false,
-    vhost           => "${domain}",
-    location => "/.well-known",
-    www_root => "/var/www/letsencrypt/${domain}"
-  }->
-  letsencrypt::certonly { $domain:
-	  domains => [$domain],
-	  plugin  => 'webroot',
-	  webroot_paths => ["/var/www/letsencrypt/${domain}"]
-	}->
+  g_server::certs::domain { $domain: }->
   nginx::resource::vhost { $domain:
     ssl => true,
     ssl_cert => "/etc/letsencrypt/live/${domain}/cert.pem",
