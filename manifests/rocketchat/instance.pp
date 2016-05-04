@@ -58,9 +58,9 @@ define g_server::rocketchat::instance(
     www_root => "/var/www/letsencrypt/${domain}/.well-known"
   }
   
-  #letsencrypt::certonly { $domain:
-	#  domains => [$domain],
-	#  plugin  => 'webroot',
-	#  webroot_paths => "/var/www/${domain}"
-	#}
+  letsencrypt::certonly { $domain:
+	  domains => [$domain],
+	  plugin  => 'webroot',
+	  webroot_paths => "/var/www/letsencrypt/${domain}"
+	}
 }
