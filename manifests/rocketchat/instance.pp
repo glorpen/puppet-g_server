@@ -55,7 +55,7 @@ define g_server::rocketchat::instance(
     ssl             => false,
     vhost           => "${domain}",
     location => "/.well-known",
-    www_root => "/var/www/letsencrypt/${domain}/.well-known"
+    www_root => "/var/www/letsencrypt/${domain}"
   }->
   letsencrypt::certonly { $domain:
 	  domains => [$domain],
