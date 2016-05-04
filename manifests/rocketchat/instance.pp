@@ -35,7 +35,7 @@ define g_server::rocketchat::instance(
     
     ssl_stapling => true,
     ssl_stapling_verify => true,
-    ssl_trusted_certificate => "/etc/letsencrypt/live/${domain}/fullchain.pem",
+    ssl_trusted_cert => "/etc/letsencrypt/live/${domain}/fullchain.pem",
     
 	  proxy       => "http://localhost:${internal_port}",
     location_cfg_append => {
