@@ -30,6 +30,7 @@ class g_server::nginx(
   
   if $letsencrypt {
 	  nginx::resource::location { 'localhost-letsencrypt':
+	    vhost    => "localhost",
 	    location => '/.well-known',
 	    www_root => '/var/www/letsencrypt/$host'
     }
