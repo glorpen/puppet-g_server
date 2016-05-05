@@ -1,7 +1,7 @@
 class g_server::turnserver(
   $ensure = present
 ){
-  package { 'net-misc/turnserver':
+  package { 'net-misc/coturn':
     ensure   => $ensure ? {
        'present' => '4.5.0.3',
        default => absent
