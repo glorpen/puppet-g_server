@@ -1,7 +1,8 @@
 class g_server (
   $external_iface = undef,
   $internal_ifaces = [],
-  $nginx = false
+  $nginx = false,
+  $turnserver = false
 ) {
   
   if ! $external_iface {
@@ -12,6 +13,10 @@ class g_server (
   
   if $nginx {
     class { 'g_server::nginx': }
+  }
+  
+  if $turnserver {
+    class { 'g_server::turnserver': }
   }
 
 }
