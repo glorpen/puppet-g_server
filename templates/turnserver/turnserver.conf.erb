@@ -57,7 +57,7 @@ alt-tls-listening-port=<%=@alt_tls_listening_port%>
 #listening-ip=2607:f0d0:1002:51::4
 
 <% @listening_ips.each do |ip| -%>
-listening-ip=<%=ip>
+listening-ip=<%=ip%>
 <% end %>
 
 # Auxiliary STUN/TURN server listening endpoint.
@@ -239,7 +239,7 @@ lt-cred-mech
 # OR:
 #user=username1:password1
 #user=username2:password2
-<% @users.each | v | -%>
+<% @users.each do | v | -%>
 user=<%=v[0]%>:<%=v[1]%>
 <% end %>
 
@@ -377,7 +377,7 @@ realm=<%=@realm%>
 #no-tls
 <% if not @tls_enabled -%>
 no-tls
-<% end %<
+<% end %>
 
 # Uncomment if no DTLS client listener is desired.
 # By default DTLS client listener is always started.
@@ -385,7 +385,7 @@ no-tls
 #no-dtls
 <% if not @tls_enabled -%>
 no-dtls
-<% end %<
+<% end %>
 
 # Uncomment if no UDP relay endpoints are allowed.
 # By default UDP relay endpoints are enabled (like in RFC 5766).
@@ -411,6 +411,9 @@ no-dtls
 # configuration file.
 #
 #cert=/etc/coturn/cert1.pem
+<% if @tls_enabled -%>
+cert=@cert
+<% end %>
 
 # Private key file.
 # Use an absolute path or path relative to the 
@@ -418,6 +421,9 @@ no-dtls
 # Use PEM file format.
 #
 #pkey=/etc/coturn/privkey1.pem
+<% if @tls_enabled -%>
+pkey=@pkey
+<% end %>
 
 # Private key file password, if it is in encoded format.
 # This option has no default value.
