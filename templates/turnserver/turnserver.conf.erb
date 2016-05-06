@@ -11,7 +11,7 @@
 # Note: actually, TLS & DTLS sessions can connect to the 
 # "plain" TCP & UDP port(s), too - if allowed by configuration.
 #
-# listening-port=3478
+#listening-port=3478
 listening-port=<%=@listening_port%>
 
 # TURN listener port for TLS (Default: 5349).
@@ -24,7 +24,7 @@ listening-port=<%=@listening_port%>
 # TLS version 1.0, 1.1 and 1.2.
 # For secure UDP connections, we support DTLS version 1.
 #
-# tls-listening-port=5349
+#tls-listening-port=5349
 <% if @tls_enabled -%>
 tls-listening-port=<%=@tls_listening_port%>
 <% end %>
@@ -38,13 +38,13 @@ tls-listening-port=<%=@tls_listening_port%>
 # RFC 5780 is supported only by UDP protocol, other protocols
 # are listening to that endpoint only for "symmetry".
 #
-# alt-listening-port=0
+#alt-listening-port=0
 alt-listening-port=<%=@alt_listening_port%>
 
 # Alternative listening port for TLS and DTLS protocols.
 # Default (or zero) value means "TLS listening port plus one".
 #
-# alt-tls-listening-port=0
+#alt-tls-listening-port=0
 <% if @tls_enabled -%>							 
 alt-tls-listening-port=<%=@alt_tls_listening_port%>
 <% end %>
