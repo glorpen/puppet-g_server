@@ -1,6 +1,34 @@
 class g_server::turnserver(
-  $ensure = present
+  $ensure = present,
+  $listening_port = 3478,
+  $alt_listening_port = 3479,
+  $tls_listening_port = 5349,
+  $alt_tls_listening_port = 5350,
+  $fingerprint = true,
+  $long_time_cred = true,
+  $users = {},
+  $realm = undef,
+  $cert = undef,
+  $pkey = undef
 ){
+
+  validate_hash($users)
+  validate_bool($fingerprint)
+  validate_bool($long_time_cred)
+  validate_string($realm)
+  
+  $tls_enabled = $cert and $pkey
+  
+  validate_integer($listening_port)
+  validate_integer($alt_listening_port)
+  
+  if $tls_enabled {
+	  validate_integer($tls_listening_port)
+	  validate_integer($alt_tls_listening_port)
+	  validate_integer($cert)
+	  validate_integer($pkey)
+  }
+
   package { 'net-misc/coturn':
     ensure   => $ensure ? {
        'present' => '4.5.0.3',
@@ -8,14 +36,29 @@ class g_server::turnserver(
     }
   }~>
   service { "coturn":
-    ensure => "running",
+    ensure => $ensure ? {
+      'present' => "running",
+      default => 'absent'
+    },
     enable => true
   }
   
-  #todo: config
+  $listening_ips = concat($::g_server::internal_ifaces, $::g_server::external_iface).map | $iface | {
+    $facts['networking']['interfaces'][$iface]["ip"]
+  }
+  
+  $ports = concat([$listening_port, $alt_listening_port], $tls_enabled ? {
+    true => [$tls_listening_port, $alt_tls_listening_port],
+    default => []
+  })
+  
+  file { '/etc/turnserver.conf':
+    content => template('g_server/turnserver/turnserver.conf.erb')
+  }~>
+  Service['coturn']
   
   ["tcp", "udp"].each | $proto | {
-	  [3478, 3479].each | $port | {
+	  $ports.each | $port | {
 		  firewall { "100.${proto}.${port} allow external turnserver":
 		    dport   => $port,
 		    proto  => $proto,
@@ -33,4 +76,7 @@ class g_server::turnserver(
 		  }
 	  }
   }
+  
+  
+  
 }
