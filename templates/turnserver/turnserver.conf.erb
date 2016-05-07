@@ -154,6 +154,12 @@ listening-ip=<%=ip%>
 #
 #min-port=49152
 #max-port=65535
+<% if @min_port -%>
+min-port=<%=@min_port%>
+<% end -%>
+<% if @max_port -%>
+max-port=<%=@max_port%>
+<% end %>
 	
 # Uncomment to run TURN server in 'normal' 'moderate' verbose mode.
 # By default the verbose mode is off.
@@ -224,6 +230,9 @@ lt-cred-mech
 # The default value is the realm name.
 #
 #server-name=blackdow.carleon.gov
+<% if @server_name %>
+server-name=<%=@server_name%>
+<% end %>
 
 # Flag that allows oAuth authentication.
 #

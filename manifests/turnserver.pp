@@ -9,13 +9,20 @@ class g_server::turnserver(
   $users = {},
   $realm = undef,
   $cert = undef,
-  $pkey = undef
+  $pkey = undef,
+  $server_name = undef,
+  $min_port = undef,
+  $max_port = undef
 ){
 
   validate_hash($users)
   validate_bool($fingerprint)
   validate_bool($long_time_cred)
   validate_string($realm)
+  
+  if $server_name {
+    validate_string($server_name)
+  }
   
   $tls_enabled = $cert and $pkey
   
