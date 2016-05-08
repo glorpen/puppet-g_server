@@ -38,7 +38,7 @@ class g_server::turnserver(
 
 	package_use { 'net-misc/coturn':
 	  use     => ['-*'],
-	  target  => 'puppet-flags',
+	  target  => 'puppet',
 	  ensure  => present,
 	}~>
   package { 'net-misc/coturn':
