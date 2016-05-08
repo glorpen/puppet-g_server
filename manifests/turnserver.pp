@@ -36,6 +36,11 @@ class g_server::turnserver(
 	  validate_integer($pkey)
   }
 
+	package_use { 'net-misc/coturn':
+	  use     => ['-*'],
+	  target  => 'puppet-flags',
+	  ensure  => present,
+	}~>
   package { 'net-misc/coturn':
     ensure   => $ensure ? {
        'present' => '4.5.0.3',
