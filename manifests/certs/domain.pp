@@ -22,6 +22,7 @@ define g_server::certs::domain(
     webroot_paths => ["/var/www/letsencrypt/${domain}"]
   }->
   exec { "dhparams for letsencrypt/${domain}":
-    command => "openssl dhparam -out /etc/letsencrypt/live/${domain}/dhparams.pem 2048"
+    command => "openssl dhparam -out /etc/letsencrypt/live/${domain}/dhparams.pem 2048",
+    path    => [ '/usr/bin/', '/bin/' ]
   }
 }
