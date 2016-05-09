@@ -31,7 +31,7 @@ define g_server::rocketchat::instance(
   g_server::certs::domain { $domain: }->
   nginx::resource::vhost { $domain:
     ssl                 => true,
-    ssl_cert            => "/etc/letsencrypt/live/${domain}/cert.pem",
+    ssl_cert            => "/etc/letsencrypt/live/${domain}/fullchain.pem",
     ssl_key             => "/etc/letsencrypt/live/${domain}/privkey.pem",
     
     ssl_stapling        => true,

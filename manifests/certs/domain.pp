@@ -20,5 +20,8 @@ define g_server::certs::domain(
     domains => [$domain],
     plugin  => 'webroot',
     webroot_paths => ["/var/www/letsencrypt/${domain}"]
+  }->
+  exec { "dhparams for letsencrypt/${domain}":
+    command => "openssl dhparam -out /etc/letsencrypt/live/${domain}/dhparams.pem 2048"
   }
 }
