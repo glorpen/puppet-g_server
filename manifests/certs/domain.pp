@@ -23,6 +23,7 @@ define g_server::certs::domain(
   }->
   exec { "dhparams for letsencrypt/${domain}":
     command => "openssl dhparam -out /etc/letsencrypt/live/${domain}/dhparams.pem 2048",
-    path    => [ '/usr/bin/', '/bin/' ]
+    path    => [ '/usr/bin/', '/bin/' ],
+    creates => "/etc/letsencrypt/live/${domain}/dhparams.pem"
   }
 }
