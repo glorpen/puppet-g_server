@@ -33,6 +33,7 @@ define g_server::rocketchat::instance(
     ssl                 => true,
     ssl_cert            => "/etc/letsencrypt/live/${domain}/fullchain.pem",
     ssl_key             => "/etc/letsencrypt/live/${domain}/privkey.pem",
+    ssl_dhparam         =>"/etc/letsencrypt/live/${domain}/dhparams.pem",
     
     ssl_stapling        => true,
     ssl_stapling_verify => true,
