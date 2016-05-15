@@ -1,9 +1,9 @@
 define g_server::git::user(
   $username = $title,
-  $ssh_keys = [],
+  $ssh_rsa_keys = [],
   $ensure = true
 ){
-  $ssh_keys.each | $index, $key | {
+  $ssh_rsa_keys.each | $index, $key | {
     #create if not exists, parent - purge recursive
     
     $parent = "${::g_server::git::home_dir}/.gitolite/keydir/${index}"
@@ -22,7 +22,7 @@ define g_server::git::user(
     file{ "${parent}/${username}.pub":
       owner   => $::g_server::git::user,
       group   => $::g_server::git::group,
-      content  => $key,
+      content  => "ssh-rsa ${key} ${username}",
       mode    => '0600',
       notify  => Exec['gitolite.refresh']
     }
