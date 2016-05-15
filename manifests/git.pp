@@ -5,6 +5,7 @@ class g_server::git(
   $home_dir = '/var/lib/gitolite',
 ){
 
+  $repo_dir = "${home_dir}/.gitolite/keydir"
   $version = "3.6.5"
   $pkg_name = 'dev-vcs/gitolite-gentoo'
   
@@ -38,6 +39,15 @@ class g_server::git(
     mode => 'u=rw'
   }~>
   file { "${home_dir}/.gitolite/keydir":
+    ensure => 'directory',
+    owner => $::g_server::git::user,
+    group => $::g_server::git::group,
+    recurse => true,
+    purge => true,
+    force => true,
+    mode => '0700'
+  }~>
+  file { $repo_dir:
     ensure => 'directory',
     owner => $::g_server::git::user,
     group => $::g_server::git::group,
