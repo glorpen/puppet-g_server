@@ -1,4 +1,4 @@
-class g_server::git::user(
+define g_server::git::user(
   $username = $title,
   $ssh_keys = [],
   $ensure = true
