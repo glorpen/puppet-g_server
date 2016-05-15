@@ -3,7 +3,7 @@ class g_server (
   $internal_ifaces = [],
   $nginx = false,
   $turnserver = false,
-  $mercurial = false
+  $git = false
 ) {
   
   if ! $external_iface {
@@ -20,8 +20,8 @@ class g_server (
     class { 'g_server::turnserver': }
   }
   
-  if $mercurial {
-    class { 'g_server::mercurial': }
+  if $git {
+    class { 'g_server::git': }
   }
 
 }
