@@ -1,7 +1,7 @@
 repo <%=@title%>
-<%- if @full_access %>
-    RW+  =  <% @full_access.each do |item| -%> <%=item%><% end %>
-<%- end %>
-<%- if @read_only %>
-    R    =  <% @read_only.each do |item| -%> <%=item%><% end %>
+<%- unless @full_access.empty? %>
+    RW+  =  <%= @full_access.join(' ') %>
+<%- end -%>
+<%- unless @read_only.empty? %>
+    R    =  <%= @read_only.join(' ') %>
 <%- end %>
