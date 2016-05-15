@@ -4,7 +4,7 @@ define g_server::git::repo(
 ){
   concat::fragment {"gitolite-repo-${title}":
     target  => 'g_server::gitolite.conf',
-    content => template('g_server/gitolite/repo.conf.erb'),
+    content => template('g_server/git/repo.conf.erb'),
     require => Exec['gitolite.setup'],
     notify  => Exec['gitolite.refresh'],
   }
