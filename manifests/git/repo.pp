@@ -1,5 +1,5 @@
 define g_server::git::repo(
-  $ensure => true,
+  $ensure = true,
   $read_only = [],
   $full_access = []
 ){
