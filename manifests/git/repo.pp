@@ -1,5 +1,5 @@
 define g_server::git::repo(
-  $ensure = true,
+  $ensure = present,
   $read_only = [],
   $full_access = []
 ){
@@ -16,8 +16,8 @@ define g_server::git::repo(
   Exec['gitolite.refresh']->
   file { "${::g_server::git::repo_dir}/${title}.git":
     ensure => $ensure? {
-      true => 'directory',
-      default => absent
+      'present' => 'directory',
+      default => 'absent'
     },
     owner => $::g_server::git::user,
     group => $::g_server::git::group,
