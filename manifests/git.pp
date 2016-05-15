@@ -2,7 +2,9 @@ class g_server::git(
   $ensure = present,
   $user = 'git',
   $group = 'git',
-  $home_dir = '/var/lib/gitolite'
+  $home_dir = '/var/lib/gitolite',
+  $users = {},
+  $repos = {}
 ){
 
   $version = "3.6.5"
@@ -56,4 +58,12 @@ class g_server::git(
   #  server => $::facts["fqdn"],
   #}
   #G_server::Git::Replicator <| |>
+  
+  $users.each | $name, $keys | {
+    g_server::git::user{ $name:
+      ssh_keys_source => $keys,
+      ensure => $ensure
+    }
+  }
+  
 }
