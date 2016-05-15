@@ -7,6 +7,9 @@ class g_server::git(
 
   $version = "3.6.5"
   $pkg_name = 'dev-vcs/gitolite-gentoo'
+  
+  $daemon = false
+  $gitweb = false
 
   package_keywords { $pkg_name:
     version => "=${version}",
@@ -26,15 +29,23 @@ class g_server::git(
     cwd => $home_dir,
     command => "gitolite setup -a dummy && rm -rf repositories/* .gitolite/conf/*",
     creates => "${home_dir}/.gitolite",
-    environment => {'HOME' => $home_dir}
+    environment => ["HOME=${home_dir}"]
+  }~>
+  file { "${home_dir}/.gitolite.rc":
+    content => template('g_server/git/gitolite.rc.erb'),
+    owner => $user,
+    group => $group,
+    mode => 'u=rw'
   }~>
   exec { 'gitolite.refresh':
     user => $user,
-    environment => {'HOME' => $home_dir},
+    environment => ["HOME=${home_dir}"],
     cwd => $home_dir,
     command => 'gitolite compile; gitolite trigger POST_COMPILE',
     path => ['/usr/bin', '/bin'],
+    refreshonly => true
   }
+  
   
   #http://gitolite.com/gitolite/odds-and-ends.html#gh
   
