@@ -46,6 +46,13 @@ class g_server::git(
     force => true,
     mode => '0700'
   }~>
+  concat { 'g_server::gitolite.conf' :
+    ensure => $ensure,
+    owner => $::g_server::git::user,
+    group => $::g_server::git::group,
+    mode => 'u=rw',
+    path => "${home_dir}/.gitolite/conf/gitolite.conf"
+  }~>
   exec { 'gitolite.refresh':
     user => $user,
     environment => ["HOME=${home_dir}"],

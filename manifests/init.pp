@@ -3,7 +3,6 @@ class g_server (
   $internal_ifaces = [],
   $nginx = false,
   $turnserver = false,
-  $git = false
 ) {
   
   if ! $external_iface {
@@ -18,10 +17,6 @@ class g_server (
   
   if $turnserver {
     class { 'g_server::turnserver': }
-  }
-  
-  if $git {
-    class { 'g_server::git': }
   }
 
 }
