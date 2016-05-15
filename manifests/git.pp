@@ -5,7 +5,7 @@ class g_server::git(
   $home_dir = '/var/lib/gitolite',
 ){
 
-  $repo_dir = "${home_dir}/.gitolite/keydir"
+  $repo_dir = "${home_dir}/repositories"
   $version = "3.6.5"
   $pkg_name = 'dev-vcs/gitolite-gentoo'
   
