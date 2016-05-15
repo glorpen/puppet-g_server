@@ -54,7 +54,8 @@ class g_server::git(
     recurse => true,
     purge => true,
     force => true,
-    mode => '0700'
+    mode => '0700',
+    backup => false
   }~>
   concat { 'g_server::gitolite.conf' :
     ensure => $ensure,

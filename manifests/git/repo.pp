@@ -14,7 +14,7 @@ define g_server::git::repo(
   }
   
   $parts = $title.split('/')
-  $parts[0:-1].each | $index, $part | {
+  $parts[0,-1].each | $index, $part | {
     $p = join($parts[0,$index+1],'/')
     ensure_resource('file', "${::g_server::git::repo_dir}/${p}", {
 	    owner => $::g_server::git::user,
