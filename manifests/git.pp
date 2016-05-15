@@ -3,8 +3,6 @@ class g_server::git(
   $user = 'git',
   $group = 'git',
   $home_dir = '/var/lib/gitolite',
-  $users = {},
-  $repos = {}
 ){
 
   $version = "3.6.5"
@@ -39,6 +37,15 @@ class g_server::git(
     group => $group,
     mode => 'u=rw'
   }~>
+  file { "${home_dir}/.gitolite/keydir":
+    ensure => 'directory',
+    owner => $::g_server::git::user,
+    group => $::g_server::git::group,
+    recurse => true,
+    purge => true,
+    force => true,
+    mode => '0700'
+  }~>
   exec { 'gitolite.refresh':
     user => $user,
     environment => ["HOME=${home_dir}"],
@@ -48,22 +55,10 @@ class g_server::git(
     refreshonly => true
   }
   
-  
-  #http://gitolite.com/gitolite/odds-and-ends.html#gh
-  
-  #/usr/share/mercurial-server/init/hginit
   #"/usr/bin/ssh-keygen -q -t #{type} -N '' -C '#{comment}' -f #{keyfile}"
   
   #@g_server::git::replicator {$::facts["clientcert"]:
   #  server => $::facts["fqdn"],
   #}
   #G_server::Git::Replicator <| |>
-  
-  $users.each | $name, $keys | {
-    g_server::git::user{ $name:
-      ssh_keys_source => $keys,
-      ensure => $ensure
-    }
-  }
-  
 }
