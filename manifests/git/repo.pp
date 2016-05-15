@@ -14,7 +14,7 @@ define g_server::git::repo(
   }
   
   Exec['gitolite.refresh']->
-  file { "${::g_server::git::repo_dir}/${title}":
+  file { "${::g_server::git::repo_dir}/${title}.git":
     ensure => $ensure? {
       true => 'directory',
       default => absent
