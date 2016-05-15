@@ -34,7 +34,7 @@ define g_server::git::repo(
     },
     owner => $::g_server::git::user,
     group => $::g_server::git::group,
-    recurse => true,
+    recurse => false,
     purge => true,
     force => true,
     mode => '0700',
