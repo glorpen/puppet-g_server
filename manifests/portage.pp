@@ -14,10 +14,12 @@ class g_server::portage(
   $python_targets = undef,
   $use_python = undef,
   $python_single_target = undef,
-  $ruby_targets = undef
+  $ruby_targets = undef,
+  $php_targets = undef
 ){
-  $keys = ['cflags', 'chost', 'cxxflags', 'portdir', 'distdir', 'pkgdir', 'features', 'makeopts', 'cpu_flags_x86', 'video_cards',
-   'use', 'policy_types', 'python_targets', 'use_python', 'python_single_target', 'ruby_targets']
+  $keys = ['cflags', 'cxxflags', 'chost', 'cpu_flags_x86', 'use', 'portdir', 'distdir', 'pkgdir',
+           'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
+           'python_single_target', 'ruby_targets', 'php_targets']
   
   $keys.each | $key | {
     $value = getvar("::g_server::portage::${key}")
