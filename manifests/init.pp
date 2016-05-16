@@ -3,7 +3,6 @@ class g_server (
   $internal_ifaces = [],
   $nginx = false,
   $turnserver = false,
-  $makeconf = {}
 ) {
   
   if ! $external_iface {
@@ -30,13 +29,7 @@ class g_server (
 		  ensure  => present,
 		}
 		
-		$makeconf.each | $key, $value | {
-	    portage::makeconf { $key:
-	      content => $value,
-	      ensure  => present,
-	    }
-	  }
-		
+		include g_server::portage
   } else {
     fail("System ${::osfamily} is not yet supported")
   }
