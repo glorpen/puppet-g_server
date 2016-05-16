@@ -21,7 +21,7 @@ class g_server::php(
       default => present
     },
   }->
-  portage::package { 'dev-lang/php:7.0':
+  package { 'dev-lang/php:7.0':
     ensure => $php70version,
   }
   
