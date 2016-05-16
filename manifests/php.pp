@@ -7,13 +7,19 @@ class g_server::php(
     keywords => ['~amd64'],
     target   => 'puppet',
     slot  => '7.0',
-    ensure   => $ensure,
+    ensure   => $php70version? {
+      undef => absent,
+      default => present
+    }
   }->
   package_keywords { 'dev-lang/php':
     keywords => ['~amd64'],
     target   => 'puppet',
     slot  => '7.0',
-    ensure   => $ensure,
+    ensure   => $php70version? {
+      undef => absent,
+      default => present
+    },
   }->
   portage::package { 'dev-lang/php':
     ensure => $php70version,
