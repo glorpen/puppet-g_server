@@ -25,10 +25,10 @@ class g_server (
       eselect_ensure => installed
     }
     
-    portage::makeconf { 'portdir_overlay':
-		  content => '/var/lib/layman',
-		  ensure  => present,
-		}
+    #portage::makeconf { 'portdir_overlay':
+		#  content => '/var/lib/layman',
+		#  ensure  => present,
+		#}
 		
 		include g_server::portage
   } else {
