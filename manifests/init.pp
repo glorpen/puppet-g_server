@@ -3,6 +3,7 @@ class g_server (
   $internal_ifaces = [],
   $nginx = false,
   $turnserver = false,
+  $makeconf = {}
 ) {
   
   if ! $external_iface {
@@ -17,6 +18,27 @@ class g_server (
   
   if $turnserver {
     class { 'g_server::turnserver': }
+  }
+  
+  if $::osfamily == 'Gentoo' {
+    class { 'portage':
+      layman_ensure => installed,
+    }
+    
+    portage::makeconf { 'portdir_overlay':
+		  content => '/var/lib/layman',
+		  ensure  => present,
+		}
+		
+		$makeconf.each | $key, $value | {
+	    portage::makeconf { $key:
+	      content => $value,
+	      ensure  => present,
+	    }
+	  }
+		
+  } else {
+    fail("System ${::osfamily} is not yet supported")
   }
 
 }
