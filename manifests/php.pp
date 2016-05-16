@@ -15,8 +15,9 @@ class g_server::php(
     slot  => '7.0',
     ensure   => $ensure,
   }->
-  package { 'dev-lang/php':
-    ensure => $php70version
+  portage::package { 'dev-lang/php':
+    ensure => $php70version,
+    slot => '7.0'
   }
   
 }
