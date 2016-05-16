@@ -2,6 +2,6 @@ repo <%=@title-%>
 <% unless @full_access.empty? %>
     RW+  =  <%= @full_access.join(' ') %>
 <%- end -%>
-<% unless @read_only.empty? %>
+<%- unless @read_only.empty? %>
     R    =  <%= @read_only.join(' ') %>
 <%- end %>
