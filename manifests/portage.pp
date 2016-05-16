@@ -18,8 +18,8 @@ class g_server::portage(
   $php_targets = undef,
 ){
   $keys = [
-    'portdir', 'distdir', 'pkgdir',
-    'cflags', 'cxxflags', 'chost', 'cpu_flags_x86', 'use',
+    'cxxflags', 'chost', 'cpu_flags_x86',
+    'use', 'portdir', 'distdir', 'pkgdir', 'cflags',
     'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
     'python_single_target', 'ruby_targets', 'php_targets'
   ]
