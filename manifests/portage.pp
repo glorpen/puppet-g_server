@@ -24,7 +24,7 @@ class g_server::portage(
     
     if $value {
 	    portage::makeconf { $key:
-	      content => ,
+	      content => $value,
 	      ensure  => present,
 	    }
     }
