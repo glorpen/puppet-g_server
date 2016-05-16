@@ -1,6 +1,6 @@
 class g_server::php(
-  $ensure => 'present',
-  $php70version => '7.0.6'
+  $ensure = 'present',
+  $php70version = '7.0.6'
 ){
   
   package_keywords { 'virtual/httpd-php':
