@@ -15,11 +15,15 @@ class g_server::portage(
   $use_python = undef,
   $python_single_target = undef,
   $ruby_targets = undef,
-  $php_targets = undef
+  $php_targets = undef,
+  $portdir_overlay = '/var/lib/layman'
 ){
-  $keys = ['cflags', 'cxxflags', 'chost', 'cpu_flags_x86', 'use', 'portdir', 'distdir', 'pkgdir',
-           'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
-           'python_single_target', 'ruby_targets', 'php_targets']
+  $keys = [
+    'portdir', 'distdir', 'portdir_overlay', 'pkgdir',
+    'cflags', 'cxxflags', 'chost', 'cpu_flags_x86', 'use',
+    'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
+    'python_single_target', 'ruby_targets', 'php_targets'
+  ]
   
   $keys.each | $key | {
     $value = getvar("::g_server::portage::${key}")

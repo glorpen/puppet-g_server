@@ -24,12 +24,6 @@ class g_server (
       layman_ensure => installed,
       eselect_ensure => installed
     }
-    
-    #portage::makeconf { 'portdir_overlay':
-		#  content => '/var/lib/layman',
-		#  ensure  => present,
-		#}
-		
 		include g_server::portage
   } else {
     fail("System ${::osfamily} is not yet supported")
