@@ -22,6 +22,7 @@ class g_server (
   if $::osfamily == 'Gentoo' {
     class { 'portage':
       layman_ensure => installed,
+      eselect_ensure => installed
     }
     
     portage::makeconf { 'portdir_overlay':
