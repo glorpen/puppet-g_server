@@ -16,10 +16,9 @@ class g_server::portage(
   $python_single_target = undef,
   $ruby_targets = undef,
   $php_targets = undef,
-  $portdir_overlay = '/var/lib/layman'
 ){
   $keys = [
-    'portdir', 'distdir', 'portdir_overlay', 'pkgdir',
+    'portdir', 'distdir', 'pkgdir',
     'cflags', 'cxxflags', 'chost', 'cpu_flags_x86', 'use',
     'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
     'python_single_target', 'ruby_targets', 'php_targets'
