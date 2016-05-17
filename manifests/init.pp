@@ -20,7 +20,7 @@ class g_server (
   }
   
   if $::osfamily == 'Gentoo' {
-		#include g_portage
+		include g_portage
   } else {
     fail("System ${::osfamily} is not yet supported")
   }
