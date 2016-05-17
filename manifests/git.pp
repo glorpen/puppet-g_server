@@ -12,10 +12,8 @@ class g_server::git(
   $daemon = false
   $gitweb = false
 
-  package_keywords { $pkg_name:
-    version => "=${version}",
+  g_portage::package_keywords { "=$pkg_name-${version}":
     ensure   => present,
-    target => 'puppet',
     keywords => ['~amd64']
   }~>
   package { $pkg_name:

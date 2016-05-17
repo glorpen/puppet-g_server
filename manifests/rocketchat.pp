@@ -3,34 +3,26 @@ class g_server::rocketchat (
 ){
 	ensure_packages(['media-gfx/imagemagick'])
 	
-  package_keywords { 'net-libs/http-parser':
+  g_portage::package_keywords { '=net-libs/http-parser-2.6.2':
 	  keywords => ['~amd64'],
-	  target   => 'puppet',
-	  version  => '>=2.6.1',
 	  ensure   => $ensure,
 	}->
-	package_keywords { 'dev-db/mongodb':
+	g_portage::package_keywords { '=dev-db/mongodb-3.2.5':
     keywords => ['~amd64'],
     target   => 'puppet',
     version  => '=3.2.5',
     ensure   => $ensure,
   }->
-  package_keywords { 'dev-libs/boost':
+  g_portage::package_keywords { '=dev-libs/boost-1.60.0':
     keywords => ['~amd64'],
-    target   => 'puppet',
-    version  => '=1.60.0',
     ensure   => $ensure,
   }->
-  package_keywords { 'app-admin/mongo-tools':
+  g_portage::package_keywords { '=app-admin/mongo-tools-3.2.5':
     keywords => ['~amd64'],
-    target   => 'puppet',
-    version  => '=3.2.5',
     ensure   => $ensure,
   }->
-  package_keywords { 'dev-util/boost-build':
+  g_portage::package_keywords { '=dev-util/boost-build-1.60.0':
     keywords => ['~amd64'],
-    target   => 'puppet',
-    version  => '=1.60.0',
     ensure   => $ensure,
   }->
 	Package['media-gfx/imagemagick']->
