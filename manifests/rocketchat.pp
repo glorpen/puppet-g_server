@@ -9,8 +9,6 @@ class g_server::rocketchat (
 	}->
 	g_portage::package_keywords { '=dev-db/mongodb-3.2.5':
     keywords => ['~amd64'],
-    target   => 'puppet',
-    version  => '=3.2.5',
     ensure   => $ensure,
   }->
   g_portage::package_keywords { '=dev-libs/boost-1.60.0':
