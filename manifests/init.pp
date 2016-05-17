@@ -22,7 +22,8 @@ class g_server (
   if $::osfamily == 'Gentoo' {
     class { 'portage':
       layman_ensure => installed,
-      eselect_ensure => installed
+      eselect_ensure => installed,
+      make_conf_remerge => false
     }
 		include g_server::portage
   } else {
