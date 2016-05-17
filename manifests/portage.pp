@@ -24,13 +24,14 @@ class g_server::portage(
     'python_single_target', 'ruby_targets', 'php_targets'
   ]
   
-  $keys.each | $key | {
+  $keys.each | $index, $key | {
     $value = getvar("::g_server::portage::${key}")
     
     if $value {
 	    portage::makeconf { $key:
 	      content => $value,
-	      ensure  => present
+	      ensure  => present,
+        order => sprintf('%.4d', $index)
 	    }
     }
   }
