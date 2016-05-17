@@ -1,6 +1,6 @@
 class g_server::portage(
-  $cflags = undef,
-  $chost = undef,
+  $cflags = '-O2 -pipe -fomit-frame-pointer -mtune=native',
+  $chost = 'x86_64-pc-linux-gnu',
   $cxxflags = '${CFLAGS}',
   $portdir = '/usr/portage',
   $distdir = '${PORTDIR}/distfiles',
