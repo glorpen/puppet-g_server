@@ -36,9 +36,8 @@ class g_server::turnserver(
 	  validate_integer($pkey)
   }
 
-	package_use { 'net-misc/coturn':
+	g_portage::package_use { 'net-misc/coturn':
 	  use     => ['-*'],
-	  target  => 'puppet',
 	  ensure  => present,
 	}~>
   package { 'net-misc/coturn':
