@@ -18,8 +18,8 @@ class g_server::portage(
   $php_targets = undef,
 ){
   $keys = [
-    'cxxflags', 'chost', 'cpu_flags_x86',
-    'use', 'portdir', 'distdir', 'pkgdir', 'cflags',
+    'cflags', 'cxxflags', 'chost', 'cpu_flags_x86',
+    'use', 'portdir', 'distdir', 'pkgdir',
     'makeopts', 'features', 'policy_types', 'video_cards', 'python_targets', 'use_python',
     'python_single_target', 'ruby_targets', 'php_targets'
   ]
@@ -30,7 +30,7 @@ class g_server::portage(
     if $value {
 	    portage::makeconf { $key:
 	      content => $value,
-	      ensure  => present,
+	      ensure  => present
 	    }
     }
   }
