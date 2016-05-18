@@ -13,8 +13,6 @@ class g_server (
   
   if $nginx {
     class { 'g_server::nginx': }
-    include g_uwsgi
-    include g_uwsgi::emperor
   }
   
   if $turnserver {
