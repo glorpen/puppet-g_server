@@ -26,7 +26,7 @@ class g_server::rocketchat (
 	Package['media-gfx/imagemagick']->
 	package { 'net-im/rocketchat-server':
 	  ensure   => $ensure ? {
-	     'present' => '0.29.0',
+	     'present' => '0.31.0',
        default => absent
 	  }
 	}~>
