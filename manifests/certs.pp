@@ -1,71 +1,72 @@
 class g_server::certs(
 ){
 
-	package_keywords { 'dev-python/zope-component':
-	  version => "=4.2.2",
+	g_portage::package_keywords { 'dev-python/zope-component/certs':
+	  atom => '=dev-python/zope-component-4.2.2',
 	  ensure   => present,
-	  target => 'puppet-certs',
+	  tag => 'puppet-certs',
 	  keywords => ['~amd64']
 	}
 	
-	package_keywords { 'dev-python/zope-event':
-    version => "=4.2.0",
+	g_portage::package_keywords { 'dev-python/zope-event/certs':
+    atom => "=dev-python/zope-event4.2.0",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'dev-python/pythondialog':
-    version => "=3.3.0-r200",
+  g_portage::package_keywords { 'dev-python/pythondialog/certs':
+    atom => "=dev-python/pythondialog/certs-3.3.0-r200",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'dev-python/parsedatetime':
-    version => "=2.1",
+  g_portage::package_keywords { 'dev-python/parsedatetime':
+    atom => "=dev-python/parsedatetime-2.1",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'dev-python/configargparse':
-    version => "=0.10.0",
+  g_portage::package_keywords { 'dev-python/configargparse':
+    atom => "=dev-python/configargparse-0.10.0",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'app-crypt/acme':
-    version => "=0.5.0",
+  g_portage::package_keywords { 'app-crypt/acme':
+    atom => "=app-crypt/acme-0.5.0",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'dev-python/pyrfc3339':
-    version => "=1.0",
+  g_portage::package_keywords { 'dev-python/pyrfc3339':
+    atom => "=dev-python/pyrfc3339-1.0",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'dev-python/psutil':
-    version => "=4.1.0",
+  g_portage::package_keywords { 'dev-python/psutil':
+    atom => "=dev-python/psutil-4.1.0",
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
-  package_keywords { 'app-crypt/letsencrypt':
+  g_portage::package_keywords { 'app-crypt/letsencrypt/certs':
+    atom => 'app-crypt/letsencrypt',
     ensure   => present,
-    target => 'puppet-certs',
+    tag => 'puppet-certs',
     keywords => ['~amd64']
   }
 
   ensure_packages(['app-crypt/letsencrypt'])
 
-  Package_keywords<| target == 'puppet-certs' |>
+  G_portage::Package_keywords<| tag == 'puppet-certs' |>
   ->Package['app-crypt/letsencrypt']
   
   file{ "/var/www/letsencrypt":
