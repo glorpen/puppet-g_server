@@ -1,7 +1,14 @@
 class g_server::mysql(
-  $port = '3306'
+  $port = '3306',
+  $internal = true
 ){
-
+  
+  firewall { 'Allow mysql from loopback':
+    dport     => $port,
+    proto    => tcp,
+    action   => accept
+    iniface => 'lo'
+  }->
 	class { '::mysql::server':
     create_root_user => false,
 	  remove_default_accounts => true,
