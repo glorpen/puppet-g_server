@@ -27,7 +27,7 @@ class g_server::mysql(
 	     'port' => $port,
 	   }
 	  },
-	  subscribe => G_portage::Package_use['g_mysql]
+	  subscribe => G_portage::Package_use['g_mysql']
 	}
 
 }
