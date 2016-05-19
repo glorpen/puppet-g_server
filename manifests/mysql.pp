@@ -10,7 +10,7 @@ class g_server::mysql(
     iniface => 'lo'
   }->
 	class { '::mysql::server':
-    create_root_user => false,
+    root_password => 'asdasd',
 	  remove_default_accounts => true,
 	  override_options => {
 	   'client'=> {
