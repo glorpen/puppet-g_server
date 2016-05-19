@@ -20,6 +20,7 @@ class g_server::mysql(
 	     'port' => $port,
 	   }
 	  },
+	  restart => true
 	}
 	
 	if $::osfamily == 'Gentoo' {
