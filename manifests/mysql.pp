@@ -26,7 +26,7 @@ class g_server::mysql(
     g_portage::package_use { 'g_mysql':
       atom => 'dev-db/mariadb',
       use => ['-pam', '-perl']
-    }->Package['virtual/mysql']
+    }->Class['mysql::server']
   }
 
 }
