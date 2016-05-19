@@ -2,6 +2,13 @@ class g_server::mysql(
   $port = '3306',
   $internal = true
 ){
+
+  if $::osfamily == 'Gentoo' {
+    g_portage::package_use { 'g_mysql':
+      atom => 'dev-db/mariadb',
+      use => ['-pam', '-perl']
+    }
+  }
   
   firewall { '010 Allow mysql from loopback':
     dport     => $port,
@@ -19,14 +26,8 @@ class g_server::mysql(
 	   'mysqld' => {
 	     'port' => $port,
 	   }
-	  }
+	  },
+	  subscribe => G_portage::Package_use['g_mysql]
 	}
-	
-	if $::osfamily == 'Gentoo' {
-    g_portage::package_use { 'dev-db/mariadb/g_mysql':
-      atom => 'dev-db/mariadb',
-      use => ['-pam', '-perl']
-    }->Class['mysql::server']
-  }
 
 }
