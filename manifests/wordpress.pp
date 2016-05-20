@@ -11,7 +11,12 @@ class g_server::wordpress(
     g_portage::package_keywords { 'www-apps/wordpress/wordpress':
       atom => 'www-apps/wordpress',
       keywords => ['~amd64']
-    }~>Package[$pkg_name]
+    }~>
+    g_portage::package_use { 'www-apps/wordpress/wordpress':
+      atom => 'www-apps/wordpress',
+      use => ['vhosts']
+    }~>
+    Package[$pkg_name]
   }
   
   package { $pkg_name:
