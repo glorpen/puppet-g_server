@@ -1,6 +1,5 @@
 class g_server::mysql(
-  $port = '3306',
-  $internal = true
+  $port = '3306'
 ){
 
   firewall { '010 Allow mysql from loopback':

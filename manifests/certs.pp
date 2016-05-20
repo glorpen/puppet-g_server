@@ -9,14 +9,14 @@ class g_server::certs(
 	}
 	
 	g_portage::package_keywords { 'dev-python/zope-event/certs':
-    atom => "=dev-python/zope-event4.2.0",
+    atom => "=dev-python/zope-event-4.2.0",
     ensure   => present,
     tag => 'puppet-certs',
     keywords => ['~amd64']
   }
   
   g_portage::package_keywords { 'dev-python/pythondialog/certs':
-    atom => "=dev-python/pythondialog/certs-3.3.0-r200",
+    atom => "=dev-python/pythondialog-3.3.0-r200",
     ensure   => present,
     tag => 'puppet-certs',
     keywords => ['~amd64']

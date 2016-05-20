@@ -3,6 +3,7 @@ class g_server (
   $internal_ifaces = [],
   $nginx = false,
   $turnserver = false,
+  $mysql = false,
 ) {
   
   if ! $external_iface {
@@ -17,6 +18,10 @@ class g_server (
   
   if $turnserver {
     class { 'g_server::turnserver': }
+  }
+  
+  if $mysql {
+    include g_server::mysql
   }
   
   if $::osfamily == 'Gentoo' {
