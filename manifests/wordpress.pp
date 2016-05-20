@@ -10,7 +10,7 @@ class g_server::wordpress(
   if $::osfamily == 'Gentoo' {
     g_portage::package_keywords { 'www-apps/wordpress/wordpress':
       atom => 'www-apps/wordpress',
-      keywords => ['amd64']
+      keywords => ['~amd64']
     }~>Package[$pkg_name]
   }
   
