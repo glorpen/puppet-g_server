@@ -65,7 +65,7 @@ class g_server::certs(
   }
 
   G_portage::Package_keywords<| tag == 'puppet-certs' |>
-  ->Package['app-crypt/certbot']
+  ~>Package['app-crypt/certbot']
   
   file{ "/var/www/letsencrypt":
     ensure => "directory",
