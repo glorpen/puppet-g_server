@@ -58,16 +58,16 @@ class g_server::certs(
   }
   
   g_portage::package_keywords { 'app-crypt/letsencrypt/certs':
-    atom => 'app-crypt/letsencrypt',
+    atom => 'app-crypt/certbot',
     ensure   => present,
     tag => 'puppet-certs',
     keywords => ['~amd64']
   }
 
-  ensure_packages(['app-crypt/letsencrypt'])
+  ensure_packages(['app-crypt/certbot'])
 
   G_portage::Package_keywords<| tag == 'puppet-certs' |>
-  ->Package['app-crypt/letsencrypt']
+  ->Package['app-crypt/certbot']
   
   file{ "/var/www/letsencrypt":
     ensure => "directory",
