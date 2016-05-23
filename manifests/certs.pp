@@ -64,8 +64,6 @@ class g_server::certs(
     keywords => ['~amd64']
   }
 
-  ensure_packages(['app-crypt/certbot'])
-
   G_portage::Package_keywords<| tag == 'puppet-certs' |>
   ->Package['app-crypt/certbot']
   
