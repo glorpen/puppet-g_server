@@ -1,7 +1,7 @@
 define g_server::wordpress::instance(
   $host = $title,
   $user = undef,
-  $ensure => present
+  $ensure = present
 ){
 
   validate_string($user)
