@@ -11,7 +11,7 @@ define g_server::wordpress::instance(
   }
   
   user { $user:
-    $home => "/var/www/${host}",
+    home => "/var/www/${host}",
     ensure => $ensure,
     shell => '/bin/false'
   }
