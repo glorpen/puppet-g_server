@@ -1,7 +1,7 @@
 class g_server::wordpress(
+  $pkg_name = 'www-apps/wordpress',
+  $version = '4.5.2'
 ){
-
-  $pkg_name = 'www-apps/wordpress'
 
   g_php::extension { 'mysql:7.0': }~>
   g_php::extension { 'pdo:7.0': }~>
@@ -20,6 +20,6 @@ class g_server::wordpress(
   }
   
   package { $pkg_name:
-    ensure => 'latest'
+    ensure => $version
   }
 }
