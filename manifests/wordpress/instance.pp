@@ -18,11 +18,12 @@ define g_server::wordpress::instance(
     shell => '/bin/false'
   }
   
-  g_portage::webapp{ $title:
+  g_portage::webapp{ "wordpress-${title}":
     application => 'wordpress',
     version => $::g_server::wordpress::version,
     user => $user,
-    group => $user
+    group => $user,
+    host => $host
   }~>
   g_uwsgi::vassal { "wordpress-${title}":
     owner => $user,
