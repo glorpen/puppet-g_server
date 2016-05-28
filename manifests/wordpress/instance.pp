@@ -31,6 +31,7 @@ define g_server::wordpress::instance(
     owner => $user,
     group => $user,
     config => @("EOT")
+      plugins = php70
 						app_dir = ${app_dir}
 						project_dir = %(app_dir)
 						
