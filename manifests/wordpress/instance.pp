@@ -11,6 +11,7 @@ define g_server::wordpress::instance(
   }
   
   $app_dir = "/var/www/${host}"
+  $uwsgi_name = "wordpress-${title}"
   
   user { $user:
     home => $app_dir,
@@ -25,7 +26,7 @@ define g_server::wordpress::instance(
     group => $user,
     host => $host
   }~>
-  g_uwsgi::vassal { "wordpress-${title}":
+  g_uwsgi::vassal { $uwsgi_name:
     owner => $user,
     group => $user,
     config => @("EOT")
@@ -46,4 +47,19 @@ define g_server::wordpress::instance(
 						php-set = max_execution_time=900
       | EOT
   }
+  
+  nginx::resource::vhost { $host:
+    index_files => ['index.php'],
+    www_root => $app_dir,
+    try_files => ['$uri', '$uri/', '/index.php?$args']
+  }
+
+		nginx::resource::location { "${host}-uwsgi":
+    vhost => $host,
+    location => '~ \.php$',
+		  uwsgi => "unix:///var/uwsgi/${uwsgi_name}"
+		  location_cfg_append => {
+		    'uwsgi_modifier1' => 14
+		  }
+	 }
 }
