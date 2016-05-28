@@ -53,7 +53,7 @@ define g_server::wordpress::instance(
     index_files => ['index.php'],
     www_root => $app_dir,
     try_files => ['$uri', '$uri/', '/index.php?$args'],
-    server_name => concat($host, $additional_hosts)
+    server_name => concat([], $host, $additional_hosts)
   }
 
 		nginx::resource::location { "${host}-uwsgi":
