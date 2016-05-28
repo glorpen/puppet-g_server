@@ -23,7 +23,10 @@ class g_server::mysql(
 	   }
 	  },
 	  restart => true
-	}
+	}->
+ class {'::mysql::client':
+   package_manage => false
+ }
 	
 	if $::osfamily == 'Gentoo' {
     g_portage::package_use { 'g_mysql':
