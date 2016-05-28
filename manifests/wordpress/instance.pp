@@ -59,7 +59,7 @@ define g_server::wordpress::instance(
 		nginx::resource::location { "${host}-uwsgi":
     vhost => $host,
     location => '~ \.php$',
-		  uwsgi => "unix:///var/uwsgi/${uwsgi_name}",
+		  uwsgi => "unix:///var/uwsgi/${uwsgi_name}.socket",
 		  location_cfg_append => {
 		    'uwsgi_modifier1' => 14
 		  }
