@@ -1,6 +1,9 @@
 class g_server::mysql(
-  $port = '3306'
+  $port = '3306',
+  $root_password = undef
 ){
+
+  validate_string($root_password)
 
   firewall { '010 Allow mysql from loopback':
     dport     => $port,
@@ -9,7 +12,7 @@ class g_server::mysql(
     iniface => 'lo'
   }->
 	class { '::mysql::server':
-    root_password => 'asdasd',
+   root_password => $root_password,
 	  remove_default_accounts => true,
 	  override_options => {
 	   'client'=> {
