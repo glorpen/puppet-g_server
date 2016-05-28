@@ -1,7 +1,8 @@
 define g_server::wordpress::instance(
   $host = $title,
   $user = undef,
-  $ensure = present
+  $ensure = present,
+  $additional_hosts = []
 ){
 
   validate_string($user)
@@ -51,7 +52,8 @@ define g_server::wordpress::instance(
   nginx::resource::vhost { $host:
     index_files => ['index.php'],
     www_root => $app_dir,
-    try_files => ['$uri', '$uri/', '/index.php?$args']
+    try_files => ['$uri', '$uri/', '/index.php?$args'],
+    server_name => concat($host, $additional_hosts)
   }
 
 		nginx::resource::location { "${host}-uwsgi":
