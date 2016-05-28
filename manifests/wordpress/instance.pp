@@ -62,4 +62,17 @@ define g_server::wordpress::instance(
 		    'uwsgi_modifier1' => 14
 		  }
 	 }
+	 
+	 nginx::resource::location { "${host}-uploads":
+	   vhost => $host,
+	   location => '~* ^/wp-content/uploads/.*\.(php|phps)$',
+    internal => true
+	 }
+	 
+	 nginx::resource::location { "${host}-config":
+	   vhost => $host,
+	   location => '/wp-config.php',
+	   location_cfg_append => {'deny'=>'all'}
+	 }
+	 
 }
