@@ -74,7 +74,8 @@ define g_server::wordpress::instance(
 	 nginx::resource::location { "${host}-config":
 	   vhost => $host,
 	   location => '/wp-config.php',
-	   location_cfg_append => {'deny'=>'all'}
+	   location_cfg_append => {'deny'=>'all'},
+	   www_root => $app_dir
 	 }
 	 
 }
