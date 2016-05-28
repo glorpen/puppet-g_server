@@ -28,7 +28,7 @@ define g_server::wordpress::instance(
   g_uwsgi::vassal { "wordpress-${title}":
     owner => $user,
     group => $user,
-    config => @("EOT"/L)
+    config => @("EOT")
 						app_dir = ${app_dir}
 						project_dir = %(app_dir)
 						
