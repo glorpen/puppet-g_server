@@ -13,9 +13,6 @@ class g_server::firewall(
 	firewallchain { 'INPUT:filter:IPv4':
     ensure => present,
     purge => true,
-    ignore => [
-      ' -j f2b-'
-    ]
   }
 	
 	Firewall {
