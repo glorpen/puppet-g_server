@@ -5,12 +5,17 @@ class g_server::firewall(
 	  purge => false,
 	}
 	
+	firewallchain { 'POSTROUTING:nat:IPv4':
+	  ensure => present,
+    purge => true,
+	}
+	
 	firewallchain { 'INPUT:filter:IPv4':
-     ensure => present,
-     purge => true,
-     ignore => [
+    ensure => present,
+    purge => true,
+    ignore => [
       ' -j f2b-'
-     ]
+    ]
   }
 	
 	Firewall {
