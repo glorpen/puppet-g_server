@@ -11,13 +11,6 @@ class g_server::services (
   $avahi = false
 ){
 
-  firewallchain { 'INPUT:filter:IPv4':
-     ensure => present,
-     ignore => [
-      ' -j f2b-'
-     ]
-  }
-  
   if $ssh {
 	  firewall { '006 Allow inbound SSH':
 	    dport     => 22,

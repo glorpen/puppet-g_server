@@ -2,8 +2,16 @@ class g_server::firewall(
 ){
 
 	resources { 'firewall':
-	  purge => true,
+	  purge => false,
 	}
+	
+	firewallchain { 'INPUT:filter:IPv4':
+     ensure => present,
+     purge => true,
+     ignore => [
+      ' -j f2b-'
+     ]
+  }
 	
 	Firewall {
 	  before  => Class['g_server::firewall::post'],
