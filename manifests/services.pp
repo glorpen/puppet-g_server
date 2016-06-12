@@ -1,5 +1,4 @@
 class g_server::services (
-  $fail2ban = false,
   $ssh = true,
   $transmission = false,
   $puppetmaster = false,
@@ -12,16 +11,6 @@ class g_server::services (
   $avahi = false
 ){
 
-  if $fail2ban {
-	  #todo temporary fix - register f2b chains
-	  firewallchain { 'f2b-postfix:filter:IPv4':
-	     ensure => present
-	  }
-	  firewallchain { 'f2b-sshd:filter:IPv4':
-	    ensure => present
-	  }
-  }
-  
   if $ssh {
 	  firewall { '006 Allow inbound SSH':
 	    dport     => 22,

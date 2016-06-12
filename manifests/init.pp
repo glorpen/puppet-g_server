@@ -24,6 +24,10 @@ class g_server (
     include g_server::mysql
   }
   
+  class { 'fail2ban':
+	  #ignoreip => '127.0.0.1'
+	}
+  
   if $::osfamily == 'Gentoo' {
 		include g_portage
   } else {
