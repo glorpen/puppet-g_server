@@ -27,6 +27,7 @@ class g_server (
   class { 'fail2ban':
 	  #ignoreip => '127.0.0.1'
 	}
+	fail2ban::jail {'sshd': enabled => true}
   
   if $::osfamily == 'Gentoo' {
 		include g_portage
