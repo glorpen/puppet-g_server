@@ -25,8 +25,10 @@ class g_server (
   }
   
   class { 'fail2ban':
-	  #ignoreip => '127.0.0.1'
+	  log_level => 'INFO',
+    log_target => 'SYSLOG'
 	}
+
 	fail2ban::jail {'sshd': enabled => true}
   
   if $::osfamily == 'Gentoo' {
