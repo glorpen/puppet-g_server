@@ -29,7 +29,7 @@ class g_server (
     log_target => 'SYSLOG'
 	}
 
-	fail2ban::jail {'sshd': enabled => true}
+	class { 'fail2ban::jail::sshd': }
   
   if $::osfamily == 'Gentoo' {
 		include g_portage
