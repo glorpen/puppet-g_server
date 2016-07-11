@@ -5,14 +5,34 @@ class g_server::firewall(
 	  purge => false,
 	}
 	
-	firewallchain { 'POSTROUTING:nat:IPv4':
-	  ensure => present,
-    purge => true,
+	['PREROUTING','OUTPUT'].each | $v | {
+		firewallchain { "${v}:raw:IPv4":
+	    ensure => present,
+	    purge => true,
+	  }
 	}
 	
-	firewallchain { 'INPUT:filter:IPv4':
-    ensure => present,
-    purge => true,
+	['PREROUTING','OUTPUT','INPUT','POSTROUTING'].each | $v | {
+		firewallchain { "${v}:nat:IPv4":
+		  ensure => present,
+	    purge => true,
+		}
+	}
+	
+	['FORWARD','OUTPUT','INPUT'].each | $v | {
+		firewallchain { "${v}:filter:IPv4":
+	    ensure => present,
+	    purge => true,
+	  }
+	}
+	
+	['IPv4','IPv6'].each | $ip | {
+		['PREROUTING','INPUT','FORWARD','OUTPUT','POSTROUTING'].each | $v | {
+	    firewallchain { "${v}:mangle:${ip}":
+	      ensure => present,
+	      purge => true,
+	    }
+	  }
   }
 	
 	Firewall {
