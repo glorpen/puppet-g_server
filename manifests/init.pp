@@ -11,6 +11,7 @@ class g_server (
   }
   
   class { 'g_server::firewall': }
+  include g_server::services
   
   if $nginx {
     class { 'g_server::nginx': }
