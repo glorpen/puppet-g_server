@@ -11,7 +11,7 @@ class g_server (
   }
   
   class { 'g_server::firewall': }
-  include g_server::services
+  include ::g_server::services
   
   if $nginx {
     class { 'g_server::nginx': }
@@ -22,7 +22,7 @@ class g_server (
   }
   
   if $mysql {
-    include g_server::mysql
+    include ::g_server::mysql
   }
   
   class { 'fail2ban':
@@ -32,8 +32,5 @@ class g_server (
 
 	class { 'fail2ban::jail::sshd': }
   
-  if $::osfamily == 'Gentoo' {
-		include g_portage
-  }
-
+  include ::g_server::repos
 }
