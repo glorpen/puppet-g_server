@@ -4,6 +4,7 @@ class g_server (
   $nginx = false,
   $turnserver = false,
   $mysql = false,
+  $mysql_options = {}
 ) {
   
   if ! $external_iface {
@@ -24,7 +25,9 @@ class g_server (
   }
   
   if $mysql {
-    include ::g_server::mysql
+    create_resources('class', {
+      'g_server::mysql' => $mysql_options
+    })
   }
   
   class { 'fail2ban':
