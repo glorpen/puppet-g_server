@@ -13,6 +13,8 @@ class g_server (
   class { 'g_server::firewall': }
   include ::g_server::services
   
+  class { 'sudo': }
+  
   if $nginx {
     class { 'g_server::nginx': }
   }
