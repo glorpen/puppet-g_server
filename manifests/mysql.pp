@@ -41,6 +41,7 @@ class g_server::mysql(
 	class { '::mysql::server':
     root_password => $root_password,
 	  remove_default_accounts => true,
+	  manage_config_file => true,
 	  override_options => {
 	   'client'=> {
 	     'port' => $_port,
