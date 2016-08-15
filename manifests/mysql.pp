@@ -21,7 +21,7 @@ class g_server::mysql(
       require => Package['mysql-server']
     }
     
-    if $::facts['os']['selinux']['enabled'] {
+    if $::facts['selinux'] {
       selinux::fcontext { 'g-mysql-data-dir':
 			  context => 'mysqld_db_t',
         pathname => "${datadir}(/.*)?",
