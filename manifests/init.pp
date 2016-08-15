@@ -1,7 +1,6 @@
 class g_server (
   $external_iface = undef,
   $internal_ifaces = [],
-  $nginx = false,
   $turnserver = false,
   $mysql = false,
   $mysql_options = {}
@@ -15,10 +14,6 @@ class g_server (
   include ::g_server::services
   
   class { 'sudo': }
-  
-  if $nginx {
-    class { 'g_server::nginx': }
-  }
   
   if $turnserver {
     class { 'g_server::turnserver': }

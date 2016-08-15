@@ -1,11 +1,25 @@
 class g_server::nginx(
+  $external = true,
+  $ssl = true,
   $letsencrypt = true,
-  $external = true
 ){
+  
+  include ::stdlib
+  include ::nginx
+  include ::g_server
+  
+  validate_boolean($ssl)
+  validate_boolean($letsencrypt)
+  validate_boolean($external)
+  
+  $ports = $ssl?{
+    true => [80, 443],
+    default => [80]
+  }
   
   if $external {
 	  firewall { "020 Allow external nginx":
-	    dport   => [80, 443],
+	    dport   => $ports,
 	    proto    => tcp,
 	    action   => accept,
 	    iniface  => $::g_server::external_iface
@@ -14,7 +28,7 @@ class g_server::nginx(
   
   $::g_server::internal_ifaces.each |$iface| {
     firewall { "020.${iface} Allow internal nginx":
-      dport   => [80, 443],
+      dport   => $ports,
       proto    => tcp,
       action   => accept,
       iniface  => $iface
@@ -28,7 +42,7 @@ class g_server::nginx(
     www_root => '/var/www/localhost',
   }
   
-  if $letsencrypt {
+  if $ssl and $letsencrypt {
 	  nginx::resource::location { 'localhost-letsencrypt':
 	    vhost    => "localhost",
 	    location => '/.well-known',
