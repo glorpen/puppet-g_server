@@ -33,4 +33,6 @@ class g_server (
 	class { 'fail2ban::jail::sshd': }
   
   include ::g_server::repos
+  
+  #$manage_repo 
 }

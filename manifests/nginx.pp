@@ -5,12 +5,29 @@ class g_server::nginx(
 ){
   
   include ::stdlib
-  include ::nginx
   include ::g_server
   
   validate_bool($ssl)
   validate_bool($letsencrypt)
   validate_bool($external)
+  
+  
+  class { ::nginx:
+    manage_repo => false
+  }
+  
+  case $::osfamily {
+    'RedHat': {
+      include ::yum::repo::nginx
+      
+      Class['yum::repo::nginx']
+      ~>Class['nginx']
+    }
+    'Gentoo': {}
+    default: {
+      fail("OS not supported")
+    }
+  }
   
   $ports = $ssl?{
     true => [80, 443],
