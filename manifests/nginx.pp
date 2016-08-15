@@ -8,9 +8,9 @@ class g_server::nginx(
   include ::nginx
   include ::g_server
   
-  validate_boolean($ssl)
-  validate_boolean($letsencrypt)
-  validate_boolean($external)
+  validate_bool($ssl)
+  validate_bool($letsencrypt)
+  validate_bool($external)
   
   $ports = $ssl?{
     true => [80, 443],

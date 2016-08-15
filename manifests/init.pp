@@ -3,7 +3,7 @@ class g_server (
   $internal_ifaces = [],
   $turnserver = false,
   $mysql = false,
-  $mysql_options = {}
+  $mysql_options = {},
 ) {
   
   if ! $external_iface {
