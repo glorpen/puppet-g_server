@@ -2,8 +2,6 @@ class g_server (
   $external_iface = undef,
   $internal_ifaces = [],
   $turnserver = false,
-  $mysql = false,
-  $mysql_options = {},
 ) {
   
   if ! $external_iface {
@@ -17,12 +15,6 @@ class g_server (
   
   if $turnserver {
     class { 'g_server::turnserver': }
-  }
-  
-  if $mysql {
-    create_resources('class', {
-      'g_server::mysql' => $mysql_options
-    })
   }
   
   class { 'fail2ban':
