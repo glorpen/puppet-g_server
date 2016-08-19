@@ -13,5 +13,6 @@
     	"version_requirement": ">=2.8.1"
     }
   ],
-  "license": "Propertiary"
+  "license": "Propertiary",
+  "source": "ssh://git@puppet.glorpen.eu/modules/g_server.git"
 }
