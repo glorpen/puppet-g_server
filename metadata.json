@@ -1,0 +1,17 @@
+{
+  "name": "glorpen-g_server",
+  "version": "1.0.0",
+  "summary": "Puppet module for server common configuration",
+  "author": "Arkadiusz Dzięgiel",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.0.0"
+    },
+    {
+    	"name": "saz/ssh",
+    	"version_requirement": ">=2.8.1"
+    }
+  ],
+  "license": "Propertiary"
+}
