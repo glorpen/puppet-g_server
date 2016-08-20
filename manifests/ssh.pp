@@ -19,7 +19,7 @@ class g_server::ssh (
       'Port'                   => $ports,
       
       'Subsystem' => 'sftp  /usr/libexec/openssh/sftp-server',
-      
+      'AllowGroups' => [$group],
       "Match Group ${group}" => {
         'PasswordAuthentication' => 'yes',
         'AllowTcpForwarding' => 'yes',
