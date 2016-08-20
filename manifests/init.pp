@@ -5,6 +5,7 @@ class g_server (
   
   $admin_username = undef,
   $admin_ssh_keys = [],
+  $root_password = undef,
   
   $manage_ssh = true,
   $manage_sudo = true,
@@ -69,8 +70,13 @@ class g_server (
 	      admin_username => $admin_username
 	    }
     }
-    
-	  
+  }
+  
+  if $root_password {
+    user { 'root':
+      ensure => present,
+      password => $root_password
+    }
   }
   
 }
