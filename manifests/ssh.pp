@@ -3,6 +3,11 @@ class g_server::ssh (
   $ports = [22],
 ){
   
+  $sftp_path = $::osfamily?{
+    'Gentoo' => '/usr/lib64/misc/sftp-server',
+    default => '/usr/libexec/openssh/sftp-server'
+  }
+  
   group { $group:
     ensure => 'present',
     system => true
@@ -11,14 +16,14 @@ class g_server::ssh (
     storeconfigs_enabled => false,
     options => {
       'UsePAM' => 'yes',
-      'GSSAPIAuthentication' => 'no',
+      #'GSSAPIAuthentication' => 'no',
 
       'ChallengeResponseAuthentication' => 'no',
       'PasswordAuthentication' => 'no',
       'PermitRootLogin'        => 'no',
       'Port'                   => $ports,
       
-      'Subsystem' => 'sftp  /usr/libexec/openssh/sftp-server',
+      'Subsystem' => "sftp  ${sftp_path}",
       'AllowGroups' => [$group],
       'AcceptEnv' => [
         'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES',
