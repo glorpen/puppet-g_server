@@ -43,7 +43,7 @@ class g_server::firewall(
 	class { '::firewall': }
 	
 	['iptables', 'ip6tables'].each | $provider | {
-  	firewall { '200 allow all external output':
+  	firewall { "200.${provider} allow all external output":
   	  outiface => $::g_server::external_iface,
       chain  => 'OUTPUT',
       proto  => 'all',
@@ -51,7 +51,7 @@ class g_server::firewall(
       provider => $provider
     }
     
-    firewall { '201 allow all loopback output':
+    firewall { "201.${provider} allow all loopback output":
       outiface => 'lo',
       chain  => 'OUTPUT',
       proto  => 'all',
