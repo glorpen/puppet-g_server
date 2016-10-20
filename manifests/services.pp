@@ -15,15 +15,29 @@ class g_server::services (
 	  firewall { '006 Allow inbound SSH':
 	    dport     => 22,
 	    proto    => tcp,
-	    action   => accept
+	    action   => accept,
+	    provider => 'iptables'
 	  }
+	  firewall { '006 Allow inbound SSH':
+      dport     => 22,
+      proto    => tcp,
+      action   => accept,
+      provider => 'ip6tables'
+    }
   }
   
   if $puppetmaster {
     firewall { '012 Allow puppetmaster':
       dport     => 8140,
       proto    => tcp,
-      action   => accept
+      action   => accept,
+      provider => 'iptables'
+    }
+    firewall { '012 Allow puppetmaster':
+      dport     => 8140,
+      proto    => tcp,
+      action   => accept,
+      provider => 'ip6tables'
     }
   }
   

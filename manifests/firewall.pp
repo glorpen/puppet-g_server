@@ -42,18 +42,22 @@ class g_server::firewall(
   class { ['g_server::firewall::pre', 'g_server::firewall::post']: }
 	class { '::firewall': }
 	
-	firewall { '200 allow all external output':
-	  outiface => $::g_server::external_iface,
-    chain  => 'OUTPUT',
-    proto  => 'all',
-    action => 'accept',
-  }
-  
-  firewall { '201 allow all loopback output':
-    outiface => 'lo',
-    chain  => 'OUTPUT',
-    proto  => 'all',
-    action => 'accept',
+	['iptables', 'ip6tables'].each | $provider | {
+  	firewall { '200 allow all external output':
+  	  outiface => $::g_server::external_iface,
+      chain  => 'OUTPUT',
+      proto  => 'all',
+      action => 'accept',
+      provider => $provider
+    }
+    
+    firewall { '201 allow all loopback output':
+      outiface => 'lo',
+      chain  => 'OUTPUT',
+      proto  => 'all',
+      action => 'accept',
+      provider => $provider
+    }
   }
 
 }
