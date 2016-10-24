@@ -35,7 +35,7 @@ class g_server::nginx(
   }
   
   if $external {
-	  firewall { "020 Allow external nginx":
+	  g_firewall { "020 Allow external nginx":
 	    dport   => $ports,
 	    proto    => tcp,
 	    action   => accept,
@@ -44,7 +44,7 @@ class g_server::nginx(
   }
   
   $::g_server::internal_ifaces.each |$iface| {
-    firewall { "020.${iface} Allow internal nginx":
+    g_firewall { "020.${iface} Allow internal nginx":
       dport   => $ports,
       proto    => tcp,
       action   => accept,

@@ -32,7 +32,7 @@ class g_server::mysql(
     }
   }
 
-  firewall { '010 Allow mysql from loopback':
+  g_firewall { '010 Allow mysql from loopback':
     dport     => $_port,
     proto    => tcp,
     action   => accept,

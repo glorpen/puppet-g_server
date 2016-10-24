@@ -12,32 +12,23 @@ class g_server::services (
 ){
 
   if $ssh {
-	  firewall { '006.ipv4 Allow inbound SSH':
+	  g_firewall { '006 Allow inbound SSH':
 	    dport     => 22,
 	    proto    => tcp,
-	    action   => accept,
-	    provider => 'iptables'
+	    action   => accept
 	  }
-	  firewall { '006.ipv6 Allow inbound SSH':
-      dport     => 22,
-      proto    => tcp,
-      action   => accept,
-      provider => 'ip6tables'
-    }
   }
   
   if $puppetmaster {
-    firewall { '012.ipv4 Allow puppetmaster':
+    g_firewall { '012 Allow puppetmaster':
       dport     => 8140,
       proto    => tcp,
       action   => accept,
-      provider => 'iptables'
     }
-    firewall { '012.ipv6 Allow puppetmaster':
+    g_firewall { '012 Allow puppetmaster':
       dport     => 8140,
       proto    => tcp,
       action   => accept,
-      provider => 'ip6tables'
     }
   }
   
@@ -45,13 +36,13 @@ class g_server::services (
     #iptables -A INPUT -m state --state RELATED,ESTABLISHED -p udp --dport 51413 -j ACCEPT
     #iptables -A OUTPUT -p udp --sport 51413 -j ACCEPT
     #TODO check
-    firewall { '010.udp Allow Transmission daemon':
+    g_firewall { '010.udp Allow Transmission daemon':
       dport    => 51413,
       proto    => udp,
       action   => accept,
       iniface  => $::g_server::external_iface
     }
-    firewall { "010.tcp Allow Transmission daemon":
+    g_firewall { "010.tcp Allow Transmission daemon":
       dport    => 51413,
       proto    => tcp,
       action   => accept,
@@ -59,7 +50,7 @@ class g_server::services (
     }
     
     $::g_server::internal_ifaces.each |$iface| {
-	    firewall { "011.${iface} Allow Transmission daemon web interface":
+	    g_firewall { "011.${iface} Allow Transmission daemon web interface":
 	      dport     => 9091,
 	      proto    => tcp,
 	      action   => accept,
@@ -71,7 +62,7 @@ class g_server::services (
   $::g_server::internal_ifaces.each |$iface| {
 	  
 	  if $tor {
-	    firewall { "013.${iface} Allow internal tor":
+	    g_firewall { "013.${iface} Allow internal tor":
 	      dport   => 9050,
 	      proto    => tcp,
 	      action   => accept,
@@ -80,7 +71,7 @@ class g_server::services (
 	  }
 	  
 	  if $ntp {
-	    firewall { "014.${iface} Allow internal NTP":
+	    g_firewall { "014.${iface} Allow internal NTP":
 	      dport   => 123,
 	      proto    => udp,
 	      action   => accept,
@@ -89,13 +80,13 @@ class g_server::services (
 	  }
 	  
 	  if $cups {
-	    firewall { "015.tcp.${iface} Allow internal Cups":
+	    g_firewall { "015.tcp.${iface} Allow internal Cups":
 	      dport   => 631,
 	      proto    => tcp,
 	      action   => accept,
 	      iniface  => $iface
 	    }
-	    firewall { "015.udp.${iface} Allow internal Cups":
+	    g_firewall { "015.udp.${iface} Allow internal Cups":
 	      dport   => 631,
 	      proto    => udp,
 	      action   => accept,
@@ -104,13 +95,13 @@ class g_server::services (
 	  }
 	  
 	  if $samba {
-	    firewall { "016.${iface} Allow internal SMBD":
+	    g_firewall { "016.${iface} Allow internal SMBD":
 	      dport   => [139, 445],
 	      proto    => tcp,
 	      action   => accept,
 	      iniface  => $iface
 	    }
-	    firewall { "017.${iface} Allow internal SMBD":
+	    g_firewall { "017.${iface} Allow internal SMBD":
 	      dport   => [137, 138],
 	      proto    => udp,
 	      action   => accept,
@@ -119,7 +110,7 @@ class g_server::services (
 	  }
 	  
 	  if $rsync {
-	    firewall { "018.${iface} Allow internal rsync":
+	    g_firewall { "018.${iface} Allow internal rsync":
 	      dport   => 873,
 	      proto    => tcp,
 	      action   => accept,
@@ -128,13 +119,13 @@ class g_server::services (
 	  }
 	  
 	  if $dnsmasq {
-	    firewall { "019.tcp.${iface} Allow internal dnsmasq":
+	    g_firewall { "019.tcp.${iface} Allow internal dnsmasq":
 	      dport   => 53,
 	      proto    => tcp,
 	      action   => accept,
 	      iniface  => $iface
 	    }
-	    firewall { "019.udp.${iface} Allow internal dnsmasq":
+	    g_firewall { "019.udp.${iface} Allow internal dnsmasq":
 	      dport   => [53, 67],
 	      proto    => udp,
 	      action   => accept,
@@ -143,7 +134,7 @@ class g_server::services (
 	  }
 	  
 	  if $avahi {
-      firewall { "021.${iface} Allow internal avahi":
+      g_firewall { "021.${iface} Allow internal avahi":
         dport   => 5353,
         proto    => udp,
         action   => accept,
