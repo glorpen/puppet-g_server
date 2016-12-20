@@ -25,11 +25,6 @@ class g_server::services (
       proto    => tcp,
       action   => accept,
     }
-    g_firewall { '012 Allow puppetmaster':
-      dport     => 8140,
-      proto    => tcp,
-      action   => accept,
-    }
   }
   
   if $transmission {
