@@ -28,15 +28,8 @@ class g_server::certs{
     keywords => ['~amd64']
   }
   
-  g_portage::package_keywords { 'dev-python/configargparse@certs':
-    atom => "=dev-python/configargparse-0.10.0",
-    ensure   => present,
-    notify => Package['letsencrypt'],
-    keywords => ['~amd64']
-  }
-  
   g_portage::package_keywords { 'app-crypt/acme@certs':
-    atom => "=app-crypt/acme-0.6.0",
+    atom => "=app-crypt/acme-0.14.1",
     ensure   => present,
     notify => Package['letsencrypt'],
     keywords => ['~amd64']
@@ -64,7 +57,7 @@ class g_server::certs{
   }
   
   g_portage::package_keywords { 'app-crypt/certbot@certs':
-    atom => 'app-crypt/certbot',
+    atom => '=app-crypt/certbot-0.14.1',
     ensure   => present,
     notify => Package['letsencrypt'],
     keywords => ['~amd64']
