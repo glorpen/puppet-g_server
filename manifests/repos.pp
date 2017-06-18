@@ -11,7 +11,7 @@ class g_server::repos(
     'RedHat': {
 	    class { 'yum':
 	      clean_repos     => true,
-	      extrarepo => concat(['epel', 'puppetlabs'], $yum_extra_repos)
+	      extrarepo => concat(['epel', 'puppetlabs_collections'], $yum_extra_repos)
 	    }
     }
   }
