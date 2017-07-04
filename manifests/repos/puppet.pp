@@ -1,4 +1,4 @@
-class g_server::repo::puppet(
+class g_server::repos::puppet(
   $version = 5,
   $priority   = 99,
 ){
@@ -18,7 +18,7 @@ class g_server::repo::puppet(
     gpgcheck       => 1,
     failovermethod => 'priority',
     gpgkey         => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetX',
-    gpgkey_source  => 'puppet:///modules/g_server/rpm-gpg/RPM-GPG-KEY-puppet${version}',
+    gpgkey_source  => "puppet:///modules/g_server/rpm-gpg/RPM-GPG-KEY-puppet${version}",
     priority       => $priority,
   }
 }
