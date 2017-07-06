@@ -1,4 +1,4 @@
-class g_server::turnserver(
+class g_server::services::turnserver(
   $ensure = present,
   $listening_port = 3478,
   $alt_listening_port = 3479,

@@ -1,15 +1,14 @@
 class g_server (
   Array $external_ifaces = [],
   Array $internal_ifaces = [],
-  $turnserver = false,
   
   $admin_username = undef,
   $admin_ssh_keys = [],
   $root_password = undef,
   
-  $manage_ssh = true,
-  $manage_sudo = true,
-  $manage_fail2ban = true
+  Boolean $manage_ssh = true,
+  Boolean $manage_sudo = true,
+  Boolean $manage_fail2ban = true
 ) {
   
   if ! $external_ifaces {
@@ -20,19 +19,10 @@ class g_server (
   include ::g_server::services
   include ::g_server::repos
   
-  if $turnserver {
-    class { 'g_server::turnserver': }
-  }
-  
-  
   if $manage_fail2ban {
-	  class { 'fail2ban':
-		  log_level => 'INFO',
-	    log_target => 'SYSLOG',
-      manage_firewall => true
-		}
-	
-		class { 'fail2ban::jail::sshd': }
+    class { 'g_server::services::fail2ban':
+      sshd => $manage_ssh
+    }
 	}
   
   if $admin_username {
@@ -41,7 +31,7 @@ class g_server (
     
     if $manage_ssh {
       
-      class { 'g_server::ssh': }
+      include g_server::services::ssh
       
       if $admin_ssh_keys {
 	      $admin_ssh_keys.each | $place, $key | {
@@ -53,7 +43,9 @@ class g_server (
 	      }
       }
       
-      $groups = concat($default_groups, $::g_server::ssh::group)
+      $groups = concat($default_groups, $::g_server::services::ssh::group)
+    } else {
+      $groups = $default_groups
     }
     
     user { $admin_username:
@@ -71,10 +63,13 @@ class g_server (
     }
   }
   
-  if $root_password {
+  if $root_password != undef {
     user { 'root':
       ensure => present,
-      password => $root_password
+      password => $root_password?{
+        false => undef,
+        default => $root_password
+      }
     }
   }
   

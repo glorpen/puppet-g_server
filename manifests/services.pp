@@ -8,12 +8,18 @@ class g_server::services (
   $samba = false,
   $rsync = false,
   $dnsmasq = false,
-  $avahi = false
+  $avahi = false,
+  $turnserver = false,
 ){
 
   if $ssh {
 	  include g_server::services::ssh
   }
+  
+  if $turnserver {
+    include g_server::services::turnserver
+  }
+  
   
   if $puppetmaster {
     g_firewall { '012 Allow puppetmaster':
