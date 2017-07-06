@@ -12,18 +12,24 @@ class g_server (
   $manage_fail2ban = true
 ) {
   
+  include ::stdlib
+  
   if ! $external_iface {
     fail("No external iface given")
   }
   
-  class { 'g_server::firewall': }
+  class { 'g_server::firewall':
+    ifaces => merge($internal_ifaces, $external_iface)
+  }
   include ::g_server::services
+  
+  include ::g_server::repos
+  
   
   if $turnserver {
     class { 'g_server::turnserver': }
   }
   
-  include ::g_server::repos
   
   if $manage_fail2ban {
 	  
