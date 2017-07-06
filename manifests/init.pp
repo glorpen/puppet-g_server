@@ -19,6 +19,7 @@ class g_server (
   include ::g_server::services
   include ::g_server::repos
   
+  #TODO: change switch in ssh class, include ::fail2ban::jail::sshd
   if $manage_fail2ban {
     class { 'g_server::services::fail2ban':
       sshd => $manage_ssh
