@@ -1,1 +1,1 @@
-type G_server::Side = Enum['internal','external','both']
+type G_server::Side = Enum['internal','external','both','none']

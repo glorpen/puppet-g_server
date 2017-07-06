@@ -1,4 +1,4 @@
-function g_server::get_interfaces(Enum["internal", "external", "both"] $side) >> Array {
+function g_server::get_interfaces(G_server::Side $side) >> Array {
   include ::stdlib
   include ::g_server
   
