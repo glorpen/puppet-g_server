@@ -1,7 +1,8 @@
 class g_server::sudo(
-  $admin_username = undef
 ){
   class { 'sudo': }
+  
+  $admin_username = $::g_server::admin_username
   
   sudo::conf { 'g_server-defaults':
     priority => 0,
@@ -10,7 +11,7 @@ class g_server::sudo(
   
   if $admin_username {
     sudo::conf { 'g_server-admin':
-      content => "${admin_username}  ALL=(ALL) ALL"
+      content => "${admin_username}  ALL=(ALL) NOPASSWD:ALL"
     }
   }
 }

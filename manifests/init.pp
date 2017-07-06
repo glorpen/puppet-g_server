@@ -57,9 +57,7 @@ class g_server (
     }
     
     if $manage_sudo {
-	    class { 'g_server::sudo':
-	      admin_username => $admin_username
-	    }
+	    include g_server::sudo
     }
   }
   
