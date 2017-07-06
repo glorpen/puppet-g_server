@@ -1,7 +1,8 @@
-class g_server::mysql(
+class g_server::services::mysql(
   $port = undef,
   $root_password = undef,
-  $datadir = undef
+  $datadir = undef,
+  G_server::Side $side = 'none',
 ){
 
   include ::stdlib
@@ -32,12 +33,6 @@ class g_server::mysql(
     }
   }
 
-  g_firewall { '010 Allow mysql from loopback':
-    dport     => $_port,
-    proto    => tcp,
-    action   => accept,
-    iniface => 'lo'
-  }->
 	class { '::mysql::server':
     root_password => $root_password,
 	  remove_default_accounts => true,
@@ -55,6 +50,15 @@ class g_server::mysql(
 	}->
   class {'::mysql::client':
     package_manage => false
+  }
+
+  g_server::get_interfaces($side).each | $iface | {
+    g_firewall { "010 Allow mysql from ${iface}":
+      dport     => $_port,
+      proto    => tcp,
+      action   => accept,
+      iniface => $iface,
+    }->Class['Mysql::Server']
   }
 	
 	if $::osfamily == 'Gentoo' {
