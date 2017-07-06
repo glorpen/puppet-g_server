@@ -31,8 +31,8 @@ class g_server (
     
     if $manage_ssh {
       
-      include g_server::services::ssh
-      
+      include ::g_server::services::ssh
+        
       if $admin_ssh_keys {
 	      $admin_ssh_keys.each | $place, $key | {
 	        ssh_authorized_key { "${admin_username}@${place}":

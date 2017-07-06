@@ -3,6 +3,9 @@ class g_server::services::ssh(
   $group = 'ssh-users',
   $ports = [22],
 ){
+  
+  $admin_user = $::g_server::admin_username
+  
   g_server::get_interfaces($side).each | $iface | {
     g_firewall { "006 Allow inbound SSH from ${iface}":
       dport    => 22,
@@ -17,6 +20,8 @@ class g_server::services::ssh(
     default => '/usr/libexec/openssh/sftp-server'
   }
   
+  $ssh_options = {}
+  
   group { $group:
     ensure => 'present',
     system => true
@@ -25,7 +30,9 @@ class g_server::services::ssh(
     storeconfigs_enabled => false,
     options => {
       'UsePAM' => 'yes',
-      #'GSSAPIAuthentication' => 'no',
+      'AddressFamily' => 'any',
+      'SyslogFacility' => 'AUTHPRIV',
+      'GSSAPIAuthentication' => 'yes',
 
       'ChallengeResponseAuthentication' => 'no',
       'PasswordAuthentication' => 'no',
@@ -40,18 +47,30 @@ class g_server::services::ssh(
         'LC_IDENTIFICATION LC_ALL LANGUAGE',
         'XMODIFIERS',
       ],
+      'Ciphers' => 'aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr',
+      'MACs' => 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160',
+      'KexAlgorithms' => 'diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1',
+      'X11Forwarding' => 'no',
     }
   }
-  #Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr
-  #MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160
-  #KexAlgorithms diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1
   
-  ssh::server::match_block { $group:
-    type => 'Group',
+  ssh::server::match_block { "Group ${group}":
+    type => '',
     options => {
       'PasswordAuthentication' => 'yes',
       'AllowTcpForwarding' => 'yes',
       'X11Forwarding' => 'yes',
+    }
+  }
+  
+  if $admin_user != undef {
+    ssh::server::match_block { "User ${admin_user}":
+      type => '',
+      options => {
+        'PasswordAuthentication' => 'no',
+        'AllowTcpForwarding' => 'no',
+        'X11Forwarding' => 'no',
+      }
     }
   }
 }
