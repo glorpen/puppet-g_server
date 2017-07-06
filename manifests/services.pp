@@ -12,11 +12,7 @@ class g_server::services (
 ){
 
   if $ssh {
-	  g_firewall { '006 Allow inbound SSH':
-	    dport     => 22,
-	    proto    => tcp,
-	    action   => accept
-	  }
+	  include g_server::services::ssh
   }
   
   if $puppetmaster {
