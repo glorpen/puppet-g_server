@@ -12,7 +12,7 @@ class g_server (
   $manage_fail2ban = true
 ) {
   
-  if ! $external_iface {
+  if ! $external_ifaces {
     fail("No external iface given")
   }
   
@@ -26,14 +26,13 @@ class g_server (
   
   
   if $manage_fail2ban {
-	  
 	  class { 'fail2ban':
 		  log_level => 'INFO',
-	    log_target => 'SYSLOG'
+	    log_target => 'SYSLOG',
+      manage_firewall => true
 		}
 	
 		class { 'fail2ban::jail::sshd': }
-		
 	}
   
   if $admin_username {
