@@ -3,6 +3,7 @@ class g_server::services::mysql(
   $root_password = undef,
   $data_dir = undef,
   G_server::Side $side = 'none',
+  Hash $options = {}
 ){
 
   include ::stdlib
@@ -32,20 +33,22 @@ class g_server::services::mysql(
 			}
     }
   }
+  
+  $_options = deep_merge($options, {
+     'client'=> {
+       'port' => $_port,
+     },
+     'mysqld' => {
+       'port' => $_port,
+       'datadir' => $_datadir
+     }
+    })
 
 	class { '::mysql::server':
     root_password => $root_password,
 	  remove_default_accounts => true,
 	  manage_config_file => true,
-	  override_options => {
-	   'client'=> {
-	     'port' => $_port,
-	   },
-	   'mysqld' => {
-	     'port' => $_port,
-	     'datadir' => $_datadir
-	   }
-	  },
+	  override_options => $_options,
 	  restart => true
 	}->
   class {'::mysql::client':
