@@ -34,13 +34,18 @@ class g_server::services::mysql(
     }
   }
   
-  $_options = deep_merge($options, {
+  $_options = deep_merge(
+    {
+      'server_id' => $::facts['mysql_server_id'],
+    },
+    $options,
+    {
      'client'=> {
        'port' => $_port,
      },
      'mysqld' => {
        'port' => $_port,
-       'datadir' => $_datadir
+       'datadir' => $_datadir,
      }
     })
 
