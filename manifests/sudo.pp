@@ -11,7 +11,7 @@ class g_server::sudo(
   
   if $admin_username {
     sudo::conf { 'g_server-admin':
-      content => "${admin_username}  ALL=(ALL) NOPASSWD:ALL"
+      content => "${admin_username}  ALL=(ALL) ALL"
     }
   }
 }

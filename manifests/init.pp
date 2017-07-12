@@ -62,14 +62,10 @@ class g_server (
     }
   }
   
-  if $root_password != undef {
-    user { 'root':
-      ensure => present,
-      password => $root_password?{
-        false => undef,
-        default => $root_password
-      }
-    }
+  user { 'root':
+    ensure => present,
+    password => $root_password,
+    shell => '/bin/false'
   }
   
 }
