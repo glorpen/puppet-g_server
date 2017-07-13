@@ -36,7 +36,10 @@ class g_server::services::mysql(
   
   $_options = deep_merge(
     {
-      'server_id' => $::facts['mysql_server_id'],
+      'mysqld' => {
+        'server_id' => $::facts['mysql_server_id'],
+        'relay-log' => 'mariadb-relay-bin',
+      }
     },
     $options,
     {
