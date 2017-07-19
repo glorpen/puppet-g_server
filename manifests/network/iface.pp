@@ -26,7 +26,7 @@ define g_server::network::iface(
   if $ipv6addr != undef {
     @@hosts::host { "${::trusted['certname']}.${name}.ipv6":
       aliases => $export_hostname,
-      ip => $ipv6addr,
+      ip => regsubst($ipv6addr, "/.*", ""),
       tag => $local_tag
     }
   }
