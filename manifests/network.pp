@@ -7,22 +7,11 @@ class g_server::network(
   }
   
   class { 'hosts':
-    purge_hosts => true,
-    enable_fqdn_entry => false
+    enable_fqdn_entry => false,
   }
-  
-  host {'ip6-localhost':
-    ip => '::1',
-    host_aliases => ['ip6-loopback']
-  }
-  host { 'ip6-localnet': ip => 'fe00::0'}
-  host { 'ip6-mcastprefix': ip => 'ff00::0'}
-  host { 'ip6-allnodes': ip => 'ff02::1'}
-  host { 'ip6-allrouters': ip => 'ff02::2'}
-  host { 'ip6-allhosts': ip => 'ff02::3'}
   
   $additional_hosts.each | $name, $conf | {
-    host { "${::fqdn}-${conf['ip']}-${name}":
+    hosts::host { "${::fqdn}-${conf['ip']}-${name}":
       name => $name,
       * => $conf
     }

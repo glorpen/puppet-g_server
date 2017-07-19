@@ -15,7 +15,7 @@ define g_server::network::iface(
   
   $export_hostname = $side ? {
     'internal' => "${::facts['networking']['hostname']}.${::g_server::network::export_tld}",
-    default => $::facts['certname']
+    default => $::trusted['certname']
   }
   
   $local_tag = $side ? {
@@ -24,15 +24,15 @@ define g_server::network::iface(
   }
   
   if $ipv6addr != undef {
-    @@host { "${::trusted['certname']}.${name}.ipv6":
-      name => $export_hostname,
+    @@hosts::host { "${::trusted['certname']}.${name}.ipv6":
+      aliases => $export_hostname,
       ip => $ipv6addr,
       tag => $local_tag
     }
   }
   if $ipv4addr != undef {
-    @@host { "${::trusted['certname']}.${name}.ipv4":
-      name => $export_hostname,
+    @@hosts::host { "${::trusted['certname']}.${name}.ipv4":
+      aliases => $export_hostname,
       ip => $ipv4addr,
       tag => $local_tag
     }
@@ -50,9 +50,9 @@ define g_server::network::iface(
   }
   
   if $side == 'internal' {
-    Host <<| tag == $internal_tag |>>
+    Hosts::Host <<| tag == $internal_tag |>>
   } else {
-    Host <<| tag == 'public' |>>
+    Hosts::Host <<| tag == 'public' |>>
   }
   
 }
