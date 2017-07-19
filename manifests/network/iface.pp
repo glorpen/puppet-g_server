@@ -14,7 +14,7 @@ define g_server::network::iface(
   $side = g_server::get_side($name)
   
   $export_hostname = $side ? {
-    'internal' => "${::facts['networking']['hostname']}.${::g_server::network::export_tld}",
+    'internal' => "${::g_server::network::internal_hostname}",
     default => $::trusted['certname']
   }
   

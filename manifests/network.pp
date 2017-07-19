@@ -1,7 +1,10 @@
 class g_server::network(
-  String $export_tld = 'internal',
+  String $internal_tld = 'internal',
   Array $additional_hosts = [],
 ){
+  
+  $internal_hostname = "${::facts['networking']['hostname']}.${internal_tld}"
+  
   class { 'network':
     ipv6enable => true,
   }
