@@ -1,6 +1,6 @@
 class g_server::network(
   String $export_tld = 'internal',
-  Hash $additional_hosts = {},
+  Array $additional_hosts = [],
 ){
   class { 'network':
     ipv6enable => true,
@@ -8,12 +8,6 @@ class g_server::network(
   
   class { 'hosts':
     enable_fqdn_entry => false,
-  }
-  
-  $additional_hosts.each | $name, $conf | {
-    hosts::host { "${::fqdn}-${conf['ip']}-${name}":
-      name => $name,
-      * => $conf
-    }
+    hosts => $additional_hosts
   }
 }
