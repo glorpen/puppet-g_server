@@ -12,7 +12,7 @@ function g_server::get_side(String $interface) >> G_server::Side {
   } elsif $external {
     'external'
   } else {
-    undef
+    'none'
   }
 
 }

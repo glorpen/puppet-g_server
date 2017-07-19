@@ -4,9 +4,9 @@ define g_server::network::iface(
   $ipv4gw = undef,
   
   $ipv6addr = undef,
-  $ipv6gw = undef
+  $ipv6gw = undef,
   
-  String $internal_tag = 'internal'
+  String $internal_tag = 'internal',
 ){
   include g_server
   include g_server::network
@@ -46,12 +46,13 @@ define g_server::network::iface(
     ipv6_autoconf => false,
     ipv6addr => $ipv6addr,
     ipv6_defaultgw => $ipv6gw,
+    bootproto => 'static'
   }
   
   if $side == 'internal' {
-    Hosts <<| tag == $internal_tag |>>
+    Host <<| tag == $internal_tag |>>
   } else {
-    Hosts <<| tag == 'public' |>>
+    Host <<| tag == 'public' |>>
   }
   
 }
