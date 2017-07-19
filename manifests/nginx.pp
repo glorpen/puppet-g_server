@@ -1,13 +1,11 @@
 class g_server::nginx(
-  $external = true,
-  $ssl = true,
-  $letsencrypt = true,
+  $ports = [80],
+  $letsencrypt = false,
 ){
   
   include ::stdlib
   include ::g_server
   
-  validate_bool($ssl)
   validate_bool($letsencrypt)
   validate_bool($external)
   
@@ -27,11 +25,6 @@ class g_server::nginx(
     default: {
       fail("OS not supported")
     }
-  }
-  
-  $ports = $ssl?{
-    true => [80, 443],
-    default => [80]
   }
   
   if $external {
@@ -59,7 +52,7 @@ class g_server::nginx(
     www_root => '/var/www/localhost',
   }
   
-  if $ssl and $letsencrypt {
+  if $letsencrypt {
 	  nginx::resource::location { 'localhost-letsencrypt':
 	    vhost    => "localhost",
 	    location => '/.well-known',

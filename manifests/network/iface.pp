@@ -42,7 +42,7 @@ define g_server::network::iface(
     ipaddress => $ipv4addr,
     netmask => $ipv4netmask,
     gateway => $ipv4gw,
-    ipv6init => $ipv6addr?{undef=>false, default=>true},
+    ipv6init => $ipv6addr?{undef=>'no', default=>'yes'},
     ipv6_autoconf => false,
     ipv6addr => $ipv6addr,
     ipv6_defaultgw => $ipv6gw,
