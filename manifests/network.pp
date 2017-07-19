@@ -11,7 +11,7 @@ class g_server::network(
   }
   
   $additional_hosts.each | $name, $conf | {
-    host { "${::fqdn}-${name}",
+    host { "${::fqdn}-${name}":
       name => $name,
       * => $conf
     }

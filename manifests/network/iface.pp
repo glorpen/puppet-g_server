@@ -24,14 +24,14 @@ define g_server::network::iface(
   }
   
   if $ipv6addr != undef {
-    @@host { "${::facts['certname']}.ipv6":
+    @@host { "${::trusted['certname']}.${name}.ipv6":
       name => $export_hostname,
       ip => $ipv6addr,
       tag => $local_tag
     }
   }
   if $ipv4addr != undef {
-    @@host { "${::facts['certname']}.ipv4":
+    @@host { "${::trusted['certname']}.${name}.ipv4":
       name => $export_hostname,
       ip => $ipv4addr,
       tag => $local_tag
