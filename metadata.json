@@ -13,8 +13,16 @@
     	"version_requirement": ">=2.8.1"
     },
     {
-        "name": "glorpen-g_firewall",
+        "name": "glorpen/g_firewall",
         "version_requirement": ">=0.1.0"
+    },
+    {
+        "name": "example42/network",
+        "version_requirement": ">=3.3.7"
+    },
+    {
+        "name": "ghoneycutt/hosts",
+        "version_requirement": ">=2.6.0"
     }
   ],
   "license": "Propertiary",
