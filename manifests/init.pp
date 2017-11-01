@@ -6,11 +6,11 @@ class g_server (
   # default values for variants has to be undef since puppet 5
   # translates it as "no value" and not "value of null"
   Variant[Boolean, Hash, Undef] $manage_ssh = undef,
-#  Boolean $manage_sudo = true,
 #  Boolean $manage_fail2ban = true,
   Variant[Boolean, Hash, Undef] $manage_network = undef,
   Boolean $manage_firewall = true,
   Boolean $manage_repos = true,
+  Boolean $manage_sudo = true,
   Variant[Boolean, Hash, Undef] $manage_accounts = undef,
   Variant[Boolean, Hash, Undef] $manage_volumes = undef,
 ) {
@@ -57,6 +57,10 @@ class g_server (
     class { 'g_server::network':
       * => $manage_network
     }
+  }
+  
+  if $manage_sudo {
+    contain ::g_server::sudo
   }
   
   if $hostname {
