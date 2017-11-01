@@ -6,7 +6,7 @@ define g_server::network::iface(
   $ipv6addr = undef,
   $ipv6gw = undef,
   
-  String $internal_tag = 'internal',
+  String $scope = 'internal', # tag of internal network - eg. vlan_1, vlan_2, ... 
 ){
   include g_server
   include g_server::network
@@ -19,7 +19,7 @@ define g_server::network::iface(
   }
   
   $local_tag = $side ? {
-    'internal' => $internal_tag,
+    'internal' => $scope,
     default => 'public'
   }
   
@@ -50,7 +50,7 @@ define g_server::network::iface(
   }
   
   if $side == 'internal' {
-    Hosts::Host <<| tag == $internal_tag |>>
+    Hosts::Host <<| tag == $scope |>>
   } else {
     Hosts::Host <<| tag == 'public' |>>
   }

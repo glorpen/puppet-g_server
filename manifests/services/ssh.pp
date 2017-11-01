@@ -4,8 +4,6 @@ class g_server::services::ssh(
   $ports = [22],
 ){
   
-  $admin_user = $::g_server::admin_username
-  
   g_server::get_interfaces($side).each | $iface | {
     g_firewall { "006 Allow inbound SSH from ${iface}":
       dport    => 22,
@@ -63,14 +61,4 @@ class g_server::services::ssh(
     }
   }
   
-  if $admin_user != undef {
-    ssh::server::match_block { "User ${admin_user}":
-      type => '',
-      options => {
-        'PasswordAuthentication' => 'no',
-        'AllowTcpForwarding' => 'no',
-        'X11Forwarding' => 'no',
-      }
-    }
-  }
 }
