@@ -15,7 +15,7 @@ define g_server::accounts::user(
     $base_groups = $groups
   }
   
-  if $::g_server::manage_ssh {
+  if defined(Class['g_server::services::ssh']) {
     
     include ::g_server::services::ssh
       

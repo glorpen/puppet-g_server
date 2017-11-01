@@ -6,7 +6,7 @@ class g_server::services::ssh(
   
   include ::g_server
   
-  if $::g_server::manage_firewall {
+  if defined(Class['g_server::firewall']) {
     g_server::get_interfaces($side).each | $iface | {
       g_firewall { "006 Allow inbound SSH from ${iface}":
         dport    => 22,

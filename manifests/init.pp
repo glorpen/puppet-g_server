@@ -2,12 +2,15 @@ class g_server (
   Array $external_ifaces = [],
   Array $internal_ifaces = [],
   Optional[String] $hostname = $::fqdn,
-  Boolean $manage_ssh = true,
+  # default values for variants has to be undef since puppet 5
+  # translates it as "no value" and not "value of null"
+  Variant[Boolean, Hash, Undef] $manage_ssh = undef,
 #  Boolean $manage_sudo = true,
 #  Boolean $manage_fail2ban = true,
-#  Boolean $manage_network = true,
+  Variant[Boolean, Hash, Undef] $manage_network = undef,
   Boolean $manage_firewall = true,
-  Boolean $manage_repos = true
+  Boolean $manage_repos = true,
+  Variant[Boolean, Hash, Undef] $manage_accounts = undef
 ) {
   
   if ! $external_ifaces {
@@ -22,8 +25,28 @@ class g_server (
     contain ::g_server::firewall
   }
   
-  if $manage_ssh {
+  if $manage_ssh == true {
     contain ::g_server::services::ssh
+  } elsif $manage_ssh =~ Hash {
+    class { 'g_server::services::ssh':
+      * => $manage_ssh
+    }
+  }
+  
+  if $manage_accounts == true {
+    contain ::g_server::accounts
+  } elsif $manage_accounts =~ Hash {
+    class { 'g_server::accounts':
+      * => $manage_accounts
+    }
+  }
+  
+  if $manage_network == true {
+    contain ::g_server::network
+  } elsif $manage_network =~ Hash {
+    class { 'g_server::network':
+      * => $manage_network
+    }
   }
   
   if $hostname {
