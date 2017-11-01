@@ -1,6 +1,6 @@
 define g_server::accounts::user(
   String $username = $title,
-  Array $ssh_keys = [],
+  Hash $ssh_keys = {},
   Boolean $admin = false,
   Array $groups = [],
   Optional[String] $home = undef
