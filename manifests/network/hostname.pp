@@ -1,4 +1,4 @@
-class g_server::hostname(
+class g_server::network::hostname(
   $hostname
 ){
   file { '/etc/hostname':
