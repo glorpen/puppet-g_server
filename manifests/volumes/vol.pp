@@ -4,7 +4,8 @@ define g_server::volumes::vol (
   String $mountpoint,
   String $size,
   String $fs = 'ext4',
-  String $fs_options = ''
+  String $fs_options = '',
+  String $mount_options = 'noatime,nodiratime'
 ){
   file { $mountpoint: 
     ensure => directory
@@ -18,6 +19,6 @@ define g_server::volumes::vol (
     mountpath_require => true,
     fs_type => $fs,
     mkfs_options => $fs_options,
-    options => 'noatime,nodiratime'
+    options => $mount_options
   }
 }
