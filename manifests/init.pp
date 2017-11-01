@@ -1,4 +1,5 @@
 class g_server (
+  # TODO: move to g_server::network
   Array $external_ifaces = [],
   Array $internal_ifaces = [],
   Optional[String] $hostname = $::fqdn,
@@ -10,11 +11,20 @@ class g_server (
   Variant[Boolean, Hash, Undef] $manage_network = undef,
   Boolean $manage_firewall = true,
   Boolean $manage_repos = true,
-  Variant[Boolean, Hash, Undef] $manage_accounts = undef
+  Variant[Boolean, Hash, Undef] $manage_accounts = undef,
+  Variant[Boolean, Hash, Undef] $manage_volumes = undef,
 ) {
   
   if ! $external_ifaces {
     fail("No external iface given")
+  }
+  
+  if $manage_volumes == true {
+    contain ::g_server::volumes
+  } elsif $manage_volumes =~ Hash {
+    class { 'g_server::volumes':
+      * => $manage_volumes
+    }
   }
   
   if $manage_repos {

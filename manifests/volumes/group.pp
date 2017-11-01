@@ -1,6 +1,6 @@
 define g_server::volumes::group (
   String $vg_name = $title,
-  Array $devices,
+  Array[String] $devices,
   Hash $volumes = {}
 ){
   $devices.each | $device | {
