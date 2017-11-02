@@ -1,4 +1,5 @@
 class g_server::repos::puppet(
+  $ensure = present,
   $version = 5,
   $priority   = 99,
 ){
@@ -11,14 +12,14 @@ class g_server::repos::puppet(
     default                                              => '6',
   }
 
-  yum::managed_yumrepo { 'puppetx':
+  yumrepo { 'puppetx':
+    ensure         => $ensure,
     descr          => "Puppet ${version} Repository el ${release} - \$basearch",
     baseurl        => "http://yum.puppetlabs.com/puppet${version}/el/${release}/\$basearch",
-    enabled        => 1,
-    gpgcheck       => 1,
+    enabled        => true,
+    gpgcheck       => true,
     failovermethod => 'priority',
-    gpgkey         => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetX',
-    gpgkey_source  => "puppet:///modules/g_server/rpm-gpg/RPM-GPG-KEY-puppet${version}",
+    gpgkey         => 'https://yum.puppetlabs.com/RPM-GPG-KEY-puppet',
     priority       => $priority,
   }
 }

@@ -1,5 +1,4 @@
 class g_server::repos(
-  $yum_extra_repos = []
 ){
   
   include ::stdlib
@@ -9,10 +8,7 @@ class g_server::repos(
       include ::g_portage
     }
     'RedHat': {
-	    class { 'yum':
-	      clean_repos     => true,
-	      extrarepo => concat(['epel'], $yum_extra_repos)
-	    }
+	    class { 'yum': }
       class { 'g_server::repos::puppet': }
     }
   }
