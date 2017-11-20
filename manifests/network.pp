@@ -11,7 +11,6 @@ class g_server::network(
   }
   
   class { 'hosts':
-    enable_fqdn_entry => false,
     hosts => $additional_hosts
   }
   
