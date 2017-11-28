@@ -3,7 +3,8 @@ define g_server::accounts::user(
   Hash $ssh_keys = {},
   Boolean $admin = false,
   Array $groups = [],
-  Optional[String] $home = undef
+  Optional[String] $home = undef,
+  Optional[String] $password_hash = undef
 ){
   include ::stdlib
   include ::g_server
@@ -51,7 +52,8 @@ define g_server::accounts::user(
     },
     groups => $_groups,
     managehome => true,
-    purge_ssh_keys => true
+    purge_ssh_keys => true,
+    password => $password_hash
   }
   
   if $::g_server::manage_sudo {
