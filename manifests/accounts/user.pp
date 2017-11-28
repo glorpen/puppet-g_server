@@ -56,7 +56,7 @@ define g_server::accounts::user(
     password => $password_hash
   }
   
-  if $::g_server::manage_sudo {
+  if $::g_server::manage_sudo and $admin {
     sudo::conf { "g_server-admin-${username}":
       content => "${username}  ALL=(ALL) ALL"
     }
