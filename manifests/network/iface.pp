@@ -47,8 +47,14 @@ define g_server::network::iface(
     ipv6_autoconf => false,
     ipv6addr => $ipv6addr,
     ipv6_defaultgw => $ipv6gw,
-    #bootproto => 'static',
-    enable_dhcp => $ipv4dhcp,
+    bootproto => $ipv4addr?{
+      undef => '',
+      default => 'static'
+    },
+    enable_dhcp => $ipv4addr?{
+      undef => $ipv4dhcp,
+      default => false
+    }
   }
   
   if $side == 'internal' {
