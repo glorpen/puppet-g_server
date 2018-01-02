@@ -7,7 +7,9 @@ define g_server::network::iface(
   $ipv6addr = undef,
   $ipv6gw = undef,
   
-  String $scope = 'internal', # tag of internal network - eg. vlan_1, vlan_2, ... 
+  String $scope = 'internal', # tag of internal network - eg. vlan_1, vlan_2, ...
+  Optional[String] $macvlan_parent = undef,
+  Optional[String] $mac_addr = undef
 ){
   include g_server
   include g_server::network
@@ -39,6 +41,25 @@ define g_server::network::iface(
     }
   }
   
+  if $macvlan_parent {
+    $_device_opts = {
+      'nm_controlled' => 'no',
+      'nozeroconf' => 'yes',
+      'type' => 'macvlan',
+      'devicetype' => 'macvlan',
+    }
+    $_desc_macvlan = "\nMACVLAN_PARENT=${macvlan_parent}\nMACVLAN_MODE=bridge"
+  } else {
+    $_desc_macvlan = ""
+    $_device_opts = {}
+  }
+  
+  if $mac_addr != undef {
+    $_desc_mac = "\nMACADDR=\"${mac_addr}\""
+  } else {
+    $_desc_mac = ''
+  }
+  
   network::interface { $name:
     ipaddress => $ipv4addr,
     netmask => $ipv4netmask,
@@ -54,7 +75,9 @@ define g_server::network::iface(
     enable_dhcp => $ipv4addr?{
       undef => $ipv4dhcp,
       default => false
-    }
+    },
+    description => " \n${_desc_mac}${_desc_macvlan}",
+    * => $_device_opts
   }
   
   if $side == 'internal' {
