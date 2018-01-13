@@ -23,10 +23,23 @@ define g_server::volumes::vol (
     volume_group => $vg_name,
     size         => $size,
     mountpath => $mountpoint,
-    mountpath_require => true,
+    mountpath_require => false,
     fs_type => $fs,
     mkfs_options => $fs_options,
     options => $mount_options,
     pass => $pass
+  }
+  
+  if $ensure == 'present' {
+    File[$mountpoint]
+    ->Mount[$mountpoint]
+  } else {
+    # fix for puppetlabs-lvm
+    Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {
+      unless => "true",
+    }
+    
+    Mount[$mountpoint]
+    ->File[$mountpoint]
   }
 }
