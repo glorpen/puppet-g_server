@@ -1,4 +1,5 @@
 define g_server::volumes::vol (
+  Enum['present','absent'] $ensure = 'present',
   String $lv_name = $title,
   String $vg_name,
   String $mountpoint,
@@ -9,11 +10,16 @@ define g_server::volumes::vol (
   Integer $pass = 0
 ){
   file { $mountpoint: 
-    ensure => directory
+    ensure => $ensure?{
+      'present' => directory,
+      default => $ensure
+    },
+    backup => false,
+    force => true,
   }
   
   lvm::logical_volume { $lv_name:
-    ensure       => present,
+    ensure       => $ensure,
     volume_group => $vg_name,
     size         => $size,
     mountpath => $mountpoint,
