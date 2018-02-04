@@ -42,6 +42,10 @@ define g_server::network::iface(
   }
   
   if $macvlan_parent {
+    if ! $::g_server::network::enable_macvlan {
+      fail('You have to enable g_server::network::enable_macvlan to manage macvlan interfaces')
+    }
+    
     $_device_opts = {
       'nm_controlled' => 'no',
       'nozeroconf' => 'yes',
