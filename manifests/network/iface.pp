@@ -58,6 +58,14 @@ define g_server::network::iface(
     $_device_opts = {}
   }
   
+  if $name.match(/.*\..*/) {
+    $_vlan_opts = {
+      'vlan' => 'yes'
+    }
+  } else {
+    $_vlan_opts = {}
+  }
+  
   if $mac_addr != undef {
     $_desc_mac = "\nMACADDR=\"${mac_addr}\""
   } else {
@@ -81,7 +89,7 @@ define g_server::network::iface(
       default => false
     },
     description => " \n${_desc_mac}${_desc_macvlan}",
-    * => $_device_opts
+    * => merge($_device_opts, $_vlan_opts)
   }
   
   if $side == 'internal' {
