@@ -58,7 +58,7 @@ define g_server::network::iface(
     $_device_opts = {}
   }
   
-  if $name.match(/.*\..*/) {
+  if ! $macvlan_parent and $name.match(/.*\..*/) {
     $_vlan_opts = {
       'vlan' => 'yes'
     }
