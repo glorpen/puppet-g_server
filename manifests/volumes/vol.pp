@@ -16,6 +16,7 @@ define g_server::volumes::vol (
     },
     backup => false,
     force => true,
+    recurse => false
   }
   
   lvm::logical_volume { $lv_name:
@@ -31,8 +32,8 @@ define g_server::volumes::vol (
   }
   
   if $ensure == 'present' {
-    File[$mountpoint]
-    ->Mount[$mountpoint]
+    /*File[$mountpoint]
+    ->Mount[$mountpoint]*/
   } else {
     # fix for puppetlabs-lvm
     Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {
