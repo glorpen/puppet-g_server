@@ -3,7 +3,6 @@ class g_server::services::ssh(
   $group = 'ssh-users',
   $ports = [22],
 ){
-  
   include ::g_server
   
   if defined(Class['g_server::firewall']) {
@@ -38,7 +37,7 @@ class g_server::services::ssh(
 
       'ChallengeResponseAuthentication' => 'no',
       'PasswordAuthentication' => 'no',
-      'PermitRootLogin'        => 'no',
+      'PermitRootLogin'        => 'without-password',
       'Port'                   => $ports,
       
       'Subsystem' => "sftp  ${sftp_path}",
