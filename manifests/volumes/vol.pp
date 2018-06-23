@@ -7,7 +7,8 @@ define g_server::volumes::vol (
   String $fs = 'ext4',
   String $fs_options = '',
   String $mount_options = 'noatime,nodiratime',
-  Integer $pass = 0
+  Integer $pass = 0,
+  Optional[String] $thinpool = undef
 ){
   file { $mountpoint: 
     ensure => $ensure?{
@@ -28,7 +29,11 @@ define g_server::volumes::vol (
     fs_type => $fs,
     mkfs_options => $fs_options,
     options => $mount_options,
-    pass => $pass
+    pass => $pass,
+    thinpool => $thinpool?{
+      undef => false,
+      default => $thinpool
+    }
   }
   
   if $ensure == 'present' {
