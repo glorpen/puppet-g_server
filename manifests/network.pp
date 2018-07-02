@@ -1,7 +1,7 @@
 class g_server::network(
   String $internal_tld = 'internal',
   Array $additional_hosts = [],
-  Hash $interfaces = {},
+  Hash[String, Optional[Hash]] $interfaces = {},
   Boolean $enable_macvlan = false
 ){
   
@@ -15,7 +15,17 @@ class g_server::network(
     hosts => $additional_hosts
   }
   
-  create_resources(g_server::network::iface, $interfaces)
+  $_interfaces = Hash($interfaces.map | $k, $v | {
+    [
+      $k,
+      $v?{
+        undef => {},
+        default => $v
+      }
+    ]
+  })
+  
+  create_resources(g_server::network::iface, $_interfaces)
   
   if $enable_macvlan {
     if $::osfamily == 'RedHat' {
