@@ -2,6 +2,7 @@ class g_server::services::ssh(
   G_server::Side $side = 'both',
   $group = 'ssh-users',
   $ports = [22],
+  Hash $host_keys = {}
 ){
   include ::g_server
   
@@ -64,4 +65,9 @@ class g_server::services::ssh(
     }
   }
   
+  $host_keys.each | $k, $v | {
+    ssh::server::host_key {"ssh_host_${k}_key":
+      * => $v
+    }
+  }
 }
