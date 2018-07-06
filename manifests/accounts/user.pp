@@ -5,7 +5,8 @@ define g_server::accounts::user(
   Boolean $admin = false,
   Array $groups = [],
   Optional[String] $home = undef,
-  Optional[String] $password_hash = undef
+  Optional[String] $password_hash = undef,
+  String $shell = '/bin/bash'
 ){
   include ::stdlib
   include ::g_server
@@ -29,7 +30,7 @@ define g_server::accounts::user(
     User[$username]->
     file {"${_home}/.ssh":
       ensure => 'directory',
-      user  => $username,
+      owner  => $username,
       group => $username,
       mode => '0700'
     }
@@ -38,7 +39,6 @@ define g_server::accounts::user(
       $ssh_authorized_keys.each | $place, $key | {
         ssh_authorized_key { "${username}@${place}":
           user  => $username,
-          group => $username,
           type  => 'ssh-rsa',
           key   => $key,
         }
@@ -78,7 +78,8 @@ define g_server::accounts::user(
     groups => $_groups,
     managehome => true,
     purge_ssh_keys => true,
-    password => $password_hash
+    password => $password_hash,
+    shell => $shell
   }
   
   if $::g_server::manage_sudo and $admin {

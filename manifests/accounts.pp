@@ -1,22 +1,20 @@
 class g_server::accounts (
   Optional[String] $root_password_hash = undef,
+  Hash $root_ssh_keys = {},
+  Hash $root_ssh_authorized_keys = {},
   $admin_groups = ['wheel'],
   Hash $users = {}
 ){
   
-  $root_base_groups = ['root']
-  if defined(Class['g_server::services::ssh']) {
-    include ::g_server::services::ssh
-    $_root_groups = concat($root_base_groups, $::g_server::services::ssh::group)
-  } else {
-    $_root_groups = $root_base_groups
-  }
-  
-  user { 'root':
-    ensure => present,
-    password => $root_password_hash,
+  g_server::accounts::user { 'root':
+    password_hash => $root_password_hash,
+    home => '/root',
     shell => '/bin/bash',
-    groups => $_root_groups
+    groups => ['root'],
+    ssh_keys => $root_ssh_keys,
+    ssh_authorized_keys => $root_ssh_authorized_keys,
+    
+    admin => false
   }
   
   create_resources(g_server::accounts::user, $users)
