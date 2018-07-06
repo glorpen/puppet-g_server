@@ -1,5 +1,6 @@
 define g_server::accounts::user(
   String $username = $title,
+  Hash $ssh_authorized_keys = {},
   Hash $ssh_keys = {},
   Boolean $admin = false,
   Array $groups = [],
@@ -11,45 +12,69 @@ define g_server::accounts::user(
   include ::g_server::accounts
   
   if $admin {
-    $base_groups = $::g_server::accounts::admin_groups
+    $base_groups = concat($groups, $::g_server::accounts::admin_groups)
   } else {
     $base_groups = $groups
+  }
+  
+  $_home = $home?{
+    undef => "/home/${username}",
+    default => $home
   }
   
   if defined(Class['g_server::services::ssh']) {
     
     include ::g_server::services::ssh
+    
+    User[$username]->
+    file {"${_home}/.ssh":
+      ensure => 'directory',
+      user  => $username,
+      group => $username,
+      mode => '0700'
+    }
       
-    if $ssh_keys {
-      $ssh_keys.each | $place, $key | {
+    if $ssh_authorized_keys {
+      $ssh_authorized_keys.each | $place, $key | {
         ssh_authorized_key { "${username}@${place}":
-          user => $username,
-          type => 'ssh-rsa',
-          key  => $key,
+          user  => $username,
+          group => $username,
+          type  => 'ssh-rsa',
+          key   => $key,
         }
       }
     }
     
+    if $ssh_keys {
+      $ssh_keys.each | $k, $v | {
+        file {"${_home}/.ssh/id_${k}.pub":
+          ensure  => 'file',
+          owner   => $username,
+          group   => $username,
+          mode    => '0644',
+          source  => $v['public_key_source'],
+          content => $v['public_key_content'],
+        }
+        file {"${_home}/.ssh/id_${k}":
+          ensure  => 'file',
+          owner   => $username,
+          group   => $username,
+          mode    => '0600',
+          source  => $v['private_key_source'],
+          content => $v['private_key_content'],
+        }
+      }
+    }
+
     $_groups = concat($base_groups, $::g_server::services::ssh::group)
     
-#    ssh::server::match_block { "User ${username}":
-#      type => '',
-#      options => {
-#        'PasswordAuthentication' => 'no',
-#        'AllowTcpForwarding' => 'no',
-#        'X11Forwarding' => 'no',
-#      }
-#    }
   } else {
     $_groups = $base_groups
   }
   
   user { $username:
     ensure => 'present',
-    home => $home?{
-      undef => "/home/${username}",
-      default => $home
-    },
+    home => $_home,
     groups => $_groups,
     managehome => true,
     purge_ssh_keys => true,
