@@ -10,15 +10,6 @@ define g_server::volumes::vol (
   Integer $pass = 0,
   Optional[String] $thinpool = undef
 ){
-  file { $mountpoint: 
-    ensure => $ensure?{
-      'present' => directory,
-      default => $ensure
-    },
-    backup => false,
-    force => true,
-    recurse => false
-  }
   
   lvm::logical_volume { $lv_name:
     ensure       => $ensure,
@@ -37,6 +28,17 @@ define g_server::volumes::vol (
   }
   
   if $ensure == 'present' {
+    
+    file { $mountpoint:
+      ensure => $ensure?{
+        'present' => directory,
+        default => $ensure
+      },
+      backup => false,
+      force => true,
+      recurse => false
+    }
+    
     /*File[$mountpoint]
     ->Mount[$mountpoint]*/
   } else {
@@ -44,8 +46,15 @@ define g_server::volumes::vol (
     Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {
       unless => "true",
     }
+    # fix for dependency cycle when ensure=>absent and file is autorequiring parent
+    # https://tickets.puppetlabs.com/browse/PUP-2451
+    exec { "g_server remove vol mountpoint ${mountpoint}":
+      path     => '/usr/bin:/usr/sbin:/bin',
+      command  => "rmdir '${mountpoint}'",
+      onlyif   => "test -d '${mountpoint}'"
+    }
     
     Mount[$mountpoint]
-    ->File[$mountpoint]
+    ->Exec["g_server remove vol mountpoint ${mountpoint}"]
   }
 }
