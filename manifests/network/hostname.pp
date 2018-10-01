@@ -2,7 +2,7 @@ class g_server::network::hostname(
   $hostname
 ){
   file { '/etc/hostname':
-    content => $hostname,
+    content => "${hostname}\n",
   }~>
   exec { 'g_server update hostname':
     command => 'hostname -F /etc/hostname',
