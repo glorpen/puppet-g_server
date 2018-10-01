@@ -6,7 +6,8 @@ define g_server::accounts::user(
   Array $groups = [],
   Optional[String] $home = undef,
   Optional[String] $password_hash = undef,
-  String $shell = '/bin/bash'
+  String $shell = '/bin/bash',
+  Boolean $ssh = true,
 ){
   include ::stdlib
   include ::g_server
@@ -23,7 +24,7 @@ define g_server::accounts::user(
     default => $home
   }
   
-  if defined(Class['g_server::services::ssh']) {
+  if defined(Class['g_server::services::ssh']) and $ssh {
     
     include ::g_server::services::ssh
     
