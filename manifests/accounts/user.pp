@@ -7,7 +7,7 @@ define g_server::accounts::user(
   Optional[String] $home = undef,
   Optional[String] $password_hash = undef,
   String $shell = '/bin/bash',
-  Boolean $ssh = true,
+  Boolean $ssh_login = true,
 ){
   include ::stdlib
   include ::g_server
@@ -32,7 +32,7 @@ define g_server::accounts::user(
     mode => '0700'
   }
 
-  if defined(Class['g_server::services::ssh']) and $ssh {
+  if defined(Class['g_server::services::ssh']) and $ssh_login {
 
     include ::g_server::services::ssh
       
