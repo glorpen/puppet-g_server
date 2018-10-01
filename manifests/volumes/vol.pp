@@ -8,7 +8,10 @@ define g_server::volumes::vol (
   String $fs_options = '',
   String $mount_options = 'noatime,nodiratime',
   Integer $pass = 0,
-  Optional[String] $thinpool = undef
+  Optional[String] $thinpool = undef,
+  Optional[String] $mountpoint_user = undef,
+  Optional[String] $mountpoint_group = undef,
+  Optional[String] $mountpoint_mode = undef
 ){
   
   lvm::logical_volume { $lv_name:
@@ -36,7 +39,10 @@ define g_server::volumes::vol (
       },
       backup => false,
       force => true,
-      recurse => false
+      recurse => false,
+      owner => $mountpoint_user,
+      group => $mountpoint_group,
+      mode => $mountpoint_mode
     }
     
     /*File[$mountpoint]
