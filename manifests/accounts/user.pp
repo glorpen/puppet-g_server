@@ -24,17 +24,17 @@ define g_server::accounts::user(
     default => $home
   }
   
+  User[$username]->
+  file {"${_home}/.ssh":
+    ensure => 'directory',
+    owner  => $username,
+    group => $username,
+    mode => '0700'
+  }
+
   if defined(Class['g_server::services::ssh']) and $ssh {
-    
+
     include ::g_server::services::ssh
-    
-    User[$username]->
-    file {"${_home}/.ssh":
-      ensure => 'directory',
-      owner  => $username,
-      group => $username,
-      mode => '0700'
-    }
       
     if $ssh_authorized_keys {
       $ssh_authorized_keys.each | $place, $key | {
@@ -45,34 +45,34 @@ define g_server::accounts::user(
         }
       }
     }
-    
-    if $ssh_keys {
-      $ssh_keys.each | $k, $v | {
-        file {"${_home}/.ssh/id_${k}.pub":
-          ensure  => 'file',
-          owner   => $username,
-          group   => $username,
-          mode    => '0644',
-          source  => $v['public_key_source'],
-          content => $v['public_key_content'],
-        }
-        file {"${_home}/.ssh/id_${k}":
-          ensure  => 'file',
-          owner   => $username,
-          group   => $username,
-          mode    => '0600',
-          source  => $v['private_key_source'],
-          content => $v['private_key_content'],
-        }
-      }
-    }
 
     $_groups = concat($base_groups, $::g_server::services::ssh::group)
-    
+
   } else {
     $_groups = $base_groups
   }
-  
+
+  if $ssh_keys {
+    $ssh_keys.each | $k, $v | {
+      file {"${_home}/.ssh/id_${k}.pub":
+        ensure  => 'file',
+        owner   => $username,
+        group   => $username,
+        mode    => '0644',
+        source  => $v['public_key_source'],
+        content => $v['public_key_content'],
+      }
+      file {"${_home}/.ssh/id_${k}":
+        ensure  => 'file',
+        owner   => $username,
+        group   => $username,
+        mode    => '0600',
+        source  => $v['private_key_source'],
+        content => $v['private_key_content'],
+      }
+    }
+  }
+
   user { $username:
     ensure => 'present',
     home => $_home,
