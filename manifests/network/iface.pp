@@ -9,7 +9,8 @@ define g_server::network::iface(
   
   String $scope = 'internal', # tag of internal network - eg. vlan_1, vlan_2, ...
   Optional[String] $macvlan_parent = undef,
-  Optional[String] $mac_addr = undef
+  Optional[String] $mac_addr = undef,
+  Boolean $dns = true
 ){
   include g_server
   include g_server::network
@@ -89,6 +90,10 @@ define g_server::network::iface(
       default => false
     },
     description => " \n${_desc_mac}${_desc_macvlan}",
+    peerdns => ($dns and $ipv4dhcp and $ipv4addr == undef)?{
+      true => 'yes',
+      default => 'no'
+    },
     * => merge($_device_opts, $_vlan_opts)
   }
   
