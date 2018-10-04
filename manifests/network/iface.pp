@@ -10,7 +10,8 @@ define g_server::network::iface(
   String $scope = 'internal', # tag of internal network - eg. vlan_1, vlan_2, ...
   Optional[String] $macvlan_parent = undef,
   Optional[String] $mac_addr = undef,
-  Boolean $dns = true
+  Boolean $dns = true,
+  Array[Hash] $routes = []
 ){
   include g_server
   include g_server::network
@@ -73,7 +74,7 @@ define g_server::network::iface(
     $_desc_mac = ''
   }
   
-  network::interface { $name:
+  ::network::interface { $name:
     ipaddress => $ipv4addr,
     netmask => $ipv4netmask,
     gateway => $ipv4gw,
@@ -103,4 +104,29 @@ define g_server::network::iface(
     Hosts::Host <<| tag == 'public' |>>
   }
   
+  if (! $routes.empty()) {
+    
+    $routes_normalized = $routes.reduce({
+      'ipaddress' => [],
+      'netmask' => [],
+      'gateway' => [],
+      'metric' => [],
+      'scope' => [],
+      'source' => [],
+      'table' => []
+    }) | $memo, $value | {
+      Hash($memo.map | $k, $v | {
+        if $value[$k] == undef {
+          $normalized = false
+        } else {
+          $normalized = $value[$k]
+        }
+        [$k, $v + [$normalized]]
+      })
+    }
+    
+    ::network::route { $name:
+      * => $routes_normalized
+    }
+  }
 }
