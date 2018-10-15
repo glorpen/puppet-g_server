@@ -76,11 +76,12 @@ class g_server (
 #    }
 #	}
 	
-	# mount tmpfs in /tmp
-  service { 'tmp.mount':
-    enable => true,
-    ensure => running,
-  }
-  
+	if $::facts['os']['family'] == 'Redhat' {
+  	# mount tmpfs in /tmp
+    service { 'tmp.mount':
+      enable => true,
+      ensure => running,
+    }
+	}
   
 }
