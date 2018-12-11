@@ -11,7 +11,8 @@ define g_server::network::iface(
   Optional[String] $macvlan_parent = undef,
   Optional[String] $mac_addr = undef,
   Boolean $dns = true,
-  Array[Hash] $routes = []
+  Array[Hash] $routes = [],
+  Array[String, 0, 2] $nameservers = []
 ){
   include g_server
   include g_server::network
@@ -74,6 +75,21 @@ define g_server::network::iface(
     $_desc_mac = ''
   }
   
+  $_dns_options = {
+    peerdns => ($dns and $ipv4dhcp and $ipv4addr == undef)?{
+      true => 'yes',
+      default => 'no'
+    },
+    #debian
+    'dns_nameservers' => $nameservers?{
+      undef => undef,
+      default => $nameservers.join(" ")
+    },
+    #redhat
+    'dns1' => $nameservers[0],
+    'dns2' => $nameservers[1]
+  }
+  
   ::network::interface { $name:
     ipaddress => $ipv4addr,
     netmask => $ipv4netmask,
@@ -91,11 +107,7 @@ define g_server::network::iface(
       default => false
     },
     description => " \n${_desc_mac}${_desc_macvlan}",
-    peerdns => ($dns and $ipv4dhcp and $ipv4addr == undef)?{
-      true => 'yes',
-      default => 'no'
-    },
-    * => merge($_device_opts, $_vlan_opts)
+    * => merge($_device_opts, $_vlan_opts, $_dns_options)
   }
   
   if $side == 'internal' {
