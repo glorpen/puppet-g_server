@@ -46,6 +46,14 @@ define g_server::volumes::vol (
         group => $mountpoint_group,
         mode => $mountpoint_mode
       }
+      if $mountpoint_user {
+        User[$mountpoint_user]->
+        File[$mountpoint]
+      }
+      if $mountpoint_group and $mountpoint_group != $mountpoint_user {
+        Group[$mountpoint_group]->
+        File[$mountpoint]
+      }
     }
     
     /*File[$mountpoint]
