@@ -7,8 +7,15 @@ class g_server::network(
   
   $internal_hostname = "${::facts['networking']['hostname']}.${internal_tld}"
   
-  class { 'network':
-    ipv6enable => true,
+  case $::osfamily {
+    'Gentoo': {
+      class { ::g_server::network::gentoo::network: }
+    }
+    default: {
+      class { 'network':
+        ipv6enable => true
+      }
+    }
   }
   
   class { 'hosts':
