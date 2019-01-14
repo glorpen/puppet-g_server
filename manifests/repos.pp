@@ -3,12 +3,15 @@ class g_server::repos(
   
   include ::stdlib
   
-  case $::osfamily {
+  case $::operatingsystem {
     'Gentoo' : {
       include ::g_portage
     }
-    'RedHat': {
+    'Centos': {
 	    class { 'yum': }
+      class { 'g_server::repos::puppet': }
+    }
+    'Fedora': {
       class { 'g_server::repos::puppet': }
     }
   }
