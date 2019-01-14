@@ -2,7 +2,7 @@ class g_server (
   # TODO: move to g_server::network
   Array $external_ifaces = [],
   Array $internal_ifaces = [],
-  Optional[String] $hostname = $::fqdn,
+  Optional[String] $hostname = $::trusted['certname'],
   # default values for variants has to be undef since puppet 5
   # translates it as "no value" and not "value of null"
   Variant[Boolean, Hash, Undef] $manage_ssh = undef,
