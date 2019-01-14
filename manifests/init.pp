@@ -13,6 +13,7 @@ class g_server (
   Boolean $manage_sudo = true,
   Variant[Boolean, Hash, Undef] $manage_accounts = undef,
   Variant[Boolean, Hash, Undef] $manage_volumes = undef,
+  Boolean $default_packages = true
 ) {
   
   if ! $external_ifaces {
@@ -83,5 +84,13 @@ class g_server (
       ensure => running,
     }
 	}
+  
+  if $default_packages {
+    ensure_packages([
+      'cronie', 'e2fsprogs', 'hostname'
+    ], {
+      ensure => 'present'
+    })
+  }
   
 }
