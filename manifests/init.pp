@@ -11,6 +11,7 @@ class g_server (
   Boolean $manage_firewall = true,
   Boolean $manage_repos = true,
   Boolean $manage_sudo = true,
+  Boolean $manage_cron = true,
   Variant[Boolean, Hash, Undef] $manage_accounts = undef,
   Variant[Boolean, Hash, Undef] $manage_volumes = undef,
   Boolean $default_packages = true
@@ -62,6 +63,10 @@ class g_server (
   
   if $manage_sudo {
     contain ::g_server::sudo
+  }
+  
+  if $manage_cron {
+    contain ::g_server::cron
   }
   
   if $hostname {
