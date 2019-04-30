@@ -34,17 +34,16 @@ class g_server::network(
 
   create_resources(g_server::network::iface, $_interfaces)
 
-  if $enable_macvlan {
-    if $::osfamily == 'RedHat' {
-      ['ifdown-macvlan', 'ifup-macvlan'].each | $f | {
-        file { "/etc/sysconfig/network-scripts/${f}":
-          ensure => $enable_macvlan?{
-            true    => present,
-            default => absent
-          },
-          mode   => 'a+rx,u+w',
-          source => "puppet:///modules/g_server/network-scripts/${f}"
-        }
+  $macvlan_ensure = $enable_macvlan?{
+    true    => present,
+    default => absent
+  }
+  if $::osfamily == 'RedHat' {
+    ['ifdown-macvlan', 'ifup-macvlan'].each | $f | {
+      file { "/etc/sysconfig/network-scripts/${f}":
+        ensure => $macvlan_ensure,
+        mode   => 'a+rx,u+w',
+        source => "puppet:///modules/g_server/network-scripts/${f}"
       }
     }
   }

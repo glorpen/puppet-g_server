@@ -3,7 +3,7 @@ class g_server::repos(
 
   include ::stdlib
 
-  case $::operatingsystem {
+  case $::facts['os']['name'] {
     'Gentoo' : {
       include ::g_portage
     }

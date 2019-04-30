@@ -2,7 +2,17 @@ class g_server::services::ssh(
   G_server::Side $side = 'both',
   $group = 'ssh-users',
   $ports = [22],
-  Hash $host_keys = {}
+  Hash $host_keys = {},
+  Array[String] $ciphers = [
+    'chacha20-poly1305@openssh.com', 'aes256-gcm@openssh.com', 'aes128-gcm@openssh.com', 'aes256-ctr', 'aes192-ctr', 'aes128-ctr'
+  ],
+  Array[String] $macs = [
+    'hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', 'umac-128-etm@openssh.com', 'hmac-sha2-512', 'hmac-sha2-256',
+    'umac-128@openssh.com'
+  ],
+  Array[String] $kex_algorithms = [
+    'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp256', 'diffie-hellman-group-exchange-sha256'
+  ]
 ){
   include ::g_server
 
@@ -49,9 +59,9 @@ class g_server::services::ssh(
         'LC_IDENTIFICATION LC_ALL LANGUAGE',
         'XMODIFIERS',
       ],
-      'Ciphers'                         => 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr',
-      'MACs'                            => 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com',
-      'KexAlgorithms'                   => 'curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256',
+      'Ciphers'                         => join($ciphers, ','),
+      'MACs'                            => join($macs, ','),
+      'KexAlgorithms'                   => join($kex_algorithms, ','),
       'X11Forwarding'                   => 'no',
     }
   }

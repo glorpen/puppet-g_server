@@ -90,35 +90,39 @@ define g_server::network::iface(
     'dns2' => $nameservers[1]
   }
 
-  case $::osfamily {
+  case $::facts['os']['family'] {
     'Gentoo': {
+      $config = $ipv4addr?{
+        undef   => $ipv4dhcp?{
+          true    => 'dhcp',
+          default => '0.0.0.0/0'
+        },
+        default => "${$ipv4addr} netmask ${ipv4netmask}"
+      }
       ::g_server::network::gentoo::iface { $name:
-        config => $ipv4addr?{
-          undef   => $ipv4dhcp?{
-            true    => 'dhcp',
-            default => '0.0.0.0/0'
-          },
-          default => "${$ipv4addr} netmask ${ipv4netmask}"
-        }
+        config => $config,
       }
     }
     default: {
+      $ipv6init = $ipv6addr?{undef=>'no', default=>'yes'}
+      $bootproto = $ipv4addr?{
+        undef   => '',
+        default => 'static'
+      }
+      $enable_dhcp = $ipv4addr?{
+        undef   => $ipv4dhcp,
+        default => false
+      }
       ::network::interface { $name:
         ipaddress      => $ipv4addr,
         netmask        => $ipv4netmask,
         gateway        => $ipv4gw,
-        ipv6init       => $ipv6addr?{undef=>'no', default=>'yes'},
+        ipv6init       => $ipv6init,
         ipv6_autoconf  => false,
         ipv6addr       => $ipv6addr,
         ipv6_defaultgw => $ipv6gw,
-        bootproto      => $ipv4addr?{
-          undef   => '',
-          default => 'static'
-        },
-        enable_dhcp    => $ipv4addr?{
-          undef   => $ipv4dhcp,
-          default => false
-        },
+        bootproto      => $bootproto,
+        enable_dhcp    => $enable_dhcp,
         description    => " \n${_desc_mac}${_desc_macvlan}",
         *              => merge($_device_opts, $_vlan_opts, $_dns_options)
       }

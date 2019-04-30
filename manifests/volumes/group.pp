@@ -1,6 +1,6 @@
 define g_server::volumes::group (
-  String $vg_name = $title,
   Array[String] $devices,
+  String $vg_name = $title,
   Hash $volumes = {},
   Hash $thin_pools = {}
 ){

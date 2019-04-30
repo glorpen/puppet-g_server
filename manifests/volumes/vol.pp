@@ -1,9 +1,9 @@
 define g_server::volumes::vol (
-  Enum['present','absent'] $ensure = 'present',
-  String $lv_name = $title,
   String $vg_name,
   String $mountpoint,
   String $size,
+  String $lv_name = $title,
+  Enum['present','absent'] $ensure = 'present',
   String $fs = 'ext4',
   String $fs_options = '',
   String $mount_options = 'noatime,nodiratime',

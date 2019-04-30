@@ -92,7 +92,7 @@ class g_server (
 
   if $default_packages {
     ensure_packages([
-      'cronie', 'e2fsprogs', 'hostname'
+      'e2fsprogs', 'hostname'
     ], {
       ensure => 'present'
     })

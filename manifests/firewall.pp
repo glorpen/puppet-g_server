@@ -7,9 +7,9 @@ class g_server::firewall {
   $ifaces.each | $iface | {
     g_firewall { "200 allow all external output for ${iface}":
       outiface => $iface,
-      chain   => 'OUTPUT',
-      proto   => 'all',
-      action  => 'accept',
+      chain    => 'OUTPUT',
+      proto    => 'all',
+      action   => 'accept',
     }
   }
 
