@@ -16,11 +16,11 @@ class g_server (
   Variant[Boolean, Hash, Undef] $manage_volumes = undef,
   Boolean $default_packages = true
 ) {
-  
+
   if ! $external_ifaces {
-    fail("No external iface given")
+    fail('No external iface given')
   }
-  
+
   if $manage_volumes == true {
     contain ::g_server::volumes
   } elsif $manage_volumes =~ Hash {
@@ -28,15 +28,15 @@ class g_server (
       * => $manage_volumes
     }
   }
-  
+
   if $manage_repos {
     contain ::g_server::repos
   }
-  
+
   if $manage_firewall {
     contain ::g_server::firewall
   }
-  
+
   if $manage_ssh == true {
     contain ::g_server::services::ssh
   } elsif $manage_ssh =~ Hash {
@@ -44,7 +44,7 @@ class g_server (
       * => $manage_ssh
     }
   }
-  
+
   if $manage_accounts == true {
     contain ::g_server::accounts
   } elsif $manage_accounts =~ Hash {
@@ -52,7 +52,7 @@ class g_server (
       * => $manage_accounts
     }
   }
-  
+
   if $manage_network == true {
     contain ::g_server::network
   } elsif $manage_network =~ Hash {
@@ -60,36 +60,36 @@ class g_server (
       * => $manage_network
     }
   }
-  
+
   if $manage_sudo {
     contain ::g_server::sudo
   }
-  
+
   if $manage_cron {
     contain ::g_server::cron
   }
-  
+
   if $hostname {
     class { 'g_server::network::hostname':
       hostname => $hostname
     }
   }
-  
+
   #TODO: change switch in ssh class, include ::fail2ban::jail::sshd
 #  if $manage_fail2ban {
 #    class { 'g_server::services::fail2ban':
 #      sshd => $manage_ssh
 #    }
 #	}
-	
-	if $::facts['os']['family'] == 'Redhat' {
-  	# mount tmpfs in /tmp
+
+  if $::facts['os']['family'] == 'Redhat' {
+    # mount tmpfs in /tmp
     service { 'tmp.mount':
-      enable => true,
       ensure => running,
+      enable => true,
     }
-	}
-  
+  }
+
   if $default_packages {
     ensure_packages([
       'cronie', 'e2fsprogs', 'hostname'
@@ -97,5 +97,5 @@ class g_server (
       ensure => 'present'
     })
   }
-  
+
 }

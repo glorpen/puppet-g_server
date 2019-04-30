@@ -12,36 +12,36 @@ define g_server::accounts::user(
   include ::stdlib
   include ::g_server
   include ::g_server::accounts
-  
+
   if $admin {
     $base_groups = concat($groups, $::g_server::accounts::admin_groups)
   } else {
     $base_groups = $groups
   }
-  
+
   $_home = $home?{
     undef => "/home/${username}",
     default => $home
   }
-  
-  User[$username]->
-  file {"${_home}/.ssh":
+
+  User[$username]
+  ->file {"${_home}/.ssh":
     ensure => 'directory',
     owner  => $username,
-    group => $username,
-    mode => '0700'
+    group  => $username,
+    mode   => '0700'
   }
 
   if defined(Class['g_server::services::ssh']) and $ssh_login {
 
     include ::g_server::services::ssh
-      
+
     if $ssh_authorized_keys {
       $ssh_authorized_keys.each | $place, $key | {
         ssh_authorized_key { "${username}@${place}":
-          user  => $username,
-          type  => 'ssh-rsa',
-          key   => $key,
+          user => $username,
+          type => 'ssh-rsa',
+          key  => $key,
         }
       }
     }
@@ -74,15 +74,15 @@ define g_server::accounts::user(
   }
 
   user { $username:
-    ensure => 'present',
-    home => $_home,
-    groups => $_groups,
-    managehome => true,
+    ensure         => 'present',
+    home           => $_home,
+    groups         => $_groups,
+    managehome     => true,
     purge_ssh_keys => true,
-    password => $password_hash,
-    shell => $shell
+    password       => $password_hash,
+    shell          => $shell
   }
-  
+
   if $::g_server::manage_sudo and $admin {
     sudo::conf { "g_server-admin-${username}":
       content => "${username}  ALL=(ALL) ALL"

@@ -15,7 +15,7 @@ define g_server::volumes::group (
     physical_volumes => $devices,
     #createonly => true
   }
-  
+
   create_resources(g_server::volumes::vol, $volumes, {'vg_name' => $vg_name})
   create_resources(g_server::volumes::thinpool, $thin_pools, {'vg_name' => $vg_name})
 }

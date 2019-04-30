@@ -14,65 +14,65 @@ define g_server::volumes::vol (
   Optional[String] $mountpoint_mode = undef,
   Boolean $manage_mountpoint = true
 ){
-  
+
   lvm::logical_volume { $lv_name:
-    ensure       => $ensure,
-    volume_group => $vg_name,
-    size         => $size,
-    mountpath => $mountpoint,
+    ensure            => $ensure,
+    volume_group      => $vg_name,
+    size              => $size,
+    mountpath         => $mountpoint,
     mountpath_require => false,
-    fs_type => $fs,
-    mkfs_options => $fs_options,
-    options => $mount_options,
-    pass => $pass,
-    thinpool => $thinpool?{
-      undef => false,
+    fs_type           => $fs,
+    mkfs_options      => $fs_options,
+    options           => $mount_options,
+    pass              => $pass,
+    thinpool          => $thinpool?{
+      undef   => false,
       default => $thinpool
     }
   }
-  
+
   if $ensure == 'present' {
-    
+
     if $manage_mountpoint {
       file { $mountpoint:
-        ensure => $ensure?{
+        ensure  => $ensure?{
           'present' => directory,
-          default => $ensure
+          default   => $ensure
         },
-        backup => false,
-        force => true,
+        backup  => false,
+        force   => true,
         recurse => false,
-        owner => $mountpoint_user,
-        group => $mountpoint_group,
-        mode => $mountpoint_mode
+        owner   => $mountpoint_user,
+        group   => $mountpoint_group,
+        mode    => $mountpoint_mode
       }
       if $mountpoint_user {
-        User[$mountpoint_user]->
-        File[$mountpoint]
+        User[$mountpoint_user]
+        -> File[$mountpoint]
       }
       if $mountpoint_group and $mountpoint_group != $mountpoint_user {
-        Group[$mountpoint_group]->
-        File[$mountpoint]
+        Group[$mountpoint_group]
+        -> File[$mountpoint]
       }
     }
-    
-    /*File[$mountpoint]
-    ->Mount[$mountpoint]*/
+
+    # File[$mountpoint]
+    # ->Mount[$mountpoint]
   } else {
     # fix for puppetlabs-lvm
     Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {
-      unless => "true",
+      unless => 'true',
     }
-    
+
     if $manage_mountpoint {
       # fix for dependency cycle when ensure=>absent and file is autorequiring parent
       # https://tickets.puppetlabs.com/browse/PUP-2451
       exec { "g_server remove vol mountpoint ${mountpoint}":
-        path     => '/usr/bin:/usr/sbin:/bin',
-        command  => "rmdir '${mountpoint}'",
-        onlyif   => "test -d '${mountpoint}'"
+        path    => '/usr/bin:/usr/sbin:/bin',
+        command => "rmdir '${mountpoint}'",
+        onlyif  => "test -d '${mountpoint}'"
       }
-      
+
       Mount[$mountpoint]
       ->Exec["g_server remove vol mountpoint ${mountpoint}"]
     }
