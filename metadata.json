@@ -1,30 +1,61 @@
 {
   "name": "glorpen-g_server",
   "version": "1.0.0",
-  "summary": "Puppet module for server common configuration",
   "author": "Arkadiusz Dzięgiel",
+  "summary": "Puppet module for server common configuration",
+  "license": "GPL-3.0-or-later",
+  "source": "https://github.com/glorpen/puppet-g_server.git",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.0.0"
+      "version_requirement": ">=4.0.0 <6.0.0"
     },
     {
-    	"name": "saz/ssh",
-    	"version_requirement": ">=2.8.1"
+      "name": "saz/ssh",
+      "version_requirement": ">=2.8.1 <6.0.0"
     },
     {
-        "name": "glorpen/g_firewall",
-        "version_requirement": ">=0.1.0"
+      "name": "glorpen/g_firewall",
+      "version_requirement": ">=0.1.0 <1.0.0"
     },
     {
-        "name": "example42/network",
-        "version_requirement": ">=3.5.0"
-    },
-    {
-        "name": "ghoneycutt/hosts",
-        "version_requirement": ">=2.6.0"
+      "name": "glorpen/hosts",
+      "version_requirement": ">=1.1.0 <2.0.0"
     }
   ],
-  "license": "Propertiary",
-  "source": "ssh://git@puppet.glorpen.eu/modules/g_server.git"
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.10.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git#1.10.0",
+  "template-ref": "1.10.0-0-gbba9ac3"
 }
