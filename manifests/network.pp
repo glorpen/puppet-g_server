@@ -1,3 +1,13 @@
+# Define: g_server::network
+#
+# Setups network interfaces and hosts.
+#
+# Parameters:
+#   [*internal_tld*]               - Domain used for hostname on internal interfaces
+#   [*additional_hosts*]           - Additional hosts passed to ::hosts
+#   [*interfaces*]                 - Sets interfaces using g_server::network::iface
+#   [*enable_macvlan*]             - Enables or disables installing scripts for macvlan interfaces support               
+#
 class g_server::network(
   String $internal_tld = 'internal',
   Array $additional_hosts = [],
