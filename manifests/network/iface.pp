@@ -11,7 +11,15 @@ define g_server::network::iface(
   Optional[String] $macvlan_parent = undef,
   Optional[String] $mac_addr = undef,
   Boolean $dns = true,
-  Array[Hash] $routes = [],
+  Array[Struct[{
+    ipaddress => Stdlib::IP::Address::Nosubnet,
+    cidr => Variant[Integer, Stdlib::IP::Address::Nosubnet],
+    gateway => Optional[Stdlib::IP::Address::Nosubnet],
+    metric => Optional[Integer],
+    scope => Optional[String],
+    source => Optional[Stdlib::IP::Address::Nosubnet],
+    table => Optional[String]
+  }]] $routes = [],
   Array[String, 0, 2] $nameservers = []
 ){
   include g_server
@@ -137,9 +145,34 @@ define g_server::network::iface(
 
   if (! $routes.empty()) {
 
+    $routes_auto = $routes.reduce({
+      'family' => [],
+      'cidr' => [],
+      'netmask' => []
+    }) | $memo, $value | {
+      $_family = $value['ipaddress'] ? {
+        Stdlib::IP::Address::V4::Nosubnet => 'inet4',
+        default => 'inet6',
+      }
+      if ($value['cidr'] =~ Integer) {
+        $_cidr = $value['cidr']
+        #TODO convert cidr to netmask
+        $_netmask = undef
+      } else {
+        $_cidr = undef
+        $_netmask = $value['cidr']
+        # netmask to cidr will be calculated in network::route
+      }
+
+      Hash({
+        'family' => $memo['family'] + [$_family],
+        'cidr' => $memo['cidr'] + [$_cidr],
+        'netmask' => $memo['netmask'] + [$_netmask]
+      })
+    }
+
     $routes_normalized = $routes.reduce({
       'ipaddress' => [],
-      'netmask' => [],
       'gateway' => [],
       'metric' => [],
       'scope' => [],
@@ -157,7 +190,7 @@ define g_server::network::iface(
     }
 
     ::network::route { $name:
-      * => $routes_normalized
+      * => merge($routes_normalized, $routes_auto)
     }
   }
 }

@@ -12,6 +12,10 @@ class g_server::services::ssh(
   ],
   Array[String] $kex_algorithms = [
     'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp521', 'ecdh-sha2-nistp384', 'ecdh-sha2-nistp256', 'diffie-hellman-group-exchange-sha256'
+  ],
+  Array[String] $accept_env = [
+    'LANG', 'LC_CTYPE', 'LC_NUMERIC', 'LC_TIME', 'LC_COLLATE', 'LC_MONETARY', 'LC_MESSAGES', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS',
+    'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION', 'LC_ALL LANGUAGE', 'XMODIFIERS'
   ]
 ){
   include ::g_server
@@ -53,12 +57,7 @@ class g_server::services::ssh(
 
       'Subsystem'                       => "sftp  ${sftp_path}",
       'AllowGroups'                     => [$group],
-      'AcceptEnv'                       => [
-        'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES',
-        'LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT',
-        'LC_IDENTIFICATION LC_ALL LANGUAGE',
-        'XMODIFIERS',
-      ],
+      'AcceptEnv'                       => join($accept_env, ' '),
       'Ciphers'                         => join($ciphers, ','),
       'MACs'                            => join($macs, ','),
       'KexAlgorithms'                   => join($kex_algorithms, ','),
