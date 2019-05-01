@@ -156,8 +156,10 @@ define g_server::network::iface(
       }
       if ($value['cidr'] =~ Integer) {
         $_cidr = $value['cidr']
-        #TODO convert cidr to netmask
-        $_netmask = undef
+        $_netmask = $_family?{
+          'inet4' => g_server_cidr2netmask($_cidr),
+          default => 0
+        }
       } else {
         $_cidr = undef
         $_netmask = $value['cidr']
