@@ -1,6 +1,5 @@
 define g_server::cron::job(
     String $ensure = 'present',
-    #command => undef
     String $minute = '*',
     String $hour = '*',
     String $date = '*',

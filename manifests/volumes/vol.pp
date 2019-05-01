@@ -15,6 +15,15 @@ define g_server::volumes::vol (
   Boolean $manage_mountpoint = true
 ){
 
+  $ensure_directory = $ensure?{
+    'present' => directory,
+    default   => $ensure
+  }
+  $_thinpool = $thinpool?{
+    undef   => false,
+    default => $thinpool
+  }
+
   lvm::logical_volume { $lv_name:
     ensure            => $ensure,
     volume_group      => $vg_name,
@@ -25,20 +34,14 @@ define g_server::volumes::vol (
     mkfs_options      => $fs_options,
     options           => $mount_options,
     pass              => $pass,
-    thinpool          => $thinpool?{
-      undef   => false,
-      default => $thinpool
-    }
+    thinpool          => $_thinpool
   }
 
   if $ensure == 'present' {
 
     if $manage_mountpoint {
       file { $mountpoint:
-        ensure  => $ensure?{
-          'present' => directory,
-          default   => $ensure
-        },
+        ensure  => $ensure_directory,
         backup  => false,
         force   => true,
         recurse => false,
