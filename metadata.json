@@ -1,8 +1,8 @@
 {
   "name": "glorpen-g_server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Arkadiusz Dzięgiel",
-  "summary": "Puppet module for server common configuration",
+  "summary": "Bits and pieces to configure base of your servers in opinionated way with power of Puppet",
   "license": "GPL-3.0-or-later",
   "source": "https://github.com/glorpen/puppet-g_server.git",
   "dependencies": [
