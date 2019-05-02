@@ -64,7 +64,9 @@ define g_server::volumes::vol (
   } else {
     # fix for puppetlabs-lvm
     Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {
+      # lint:ignore:quoted_booleans
       unless => 'true',
+      # lint:endignore
     }
 
     if $manage_mountpoint {
