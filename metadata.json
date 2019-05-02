@@ -21,6 +21,18 @@
     {
       "name": "glorpen/hosts",
       "version_requirement": ">=1.1.0 <2.0.0"
+    },
+    {
+      "name": "saz/sudo",
+      "version_requirement": ">=3.0.0 <7.0.0"
+    },
+    {
+      "name": "puppet/cron",
+      "version_requirement": ">=1.0.0 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">=4.0.0 <6.0.0"
     }
   ],
   "operatingsystem_support": [
