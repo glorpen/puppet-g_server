@@ -18,7 +18,11 @@ describe 'G_server::Network::Iface' do
       }
     end
 
-    it { is_expected.to contain_network__route('eth0').with_family(['inet4']).with_cidr([nil]) }
+    if Puppet.version >= '6.0.0'
+      it { is_expected.to contain_network__route('eth0').with_family(['inet4']).with_cidr([nil]) }
+    else
+      it { is_expected.to contain_network__route('eth0').with_family(['inet4']).with_cidr([:undef]) }
+    end
   end
 
   context 'with ipv4 route and no netmask' do
