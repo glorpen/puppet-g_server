@@ -43,7 +43,9 @@ class g_server::services::ssh(
     system => true
   }
   -> class { 'ssh::server':
+    # https://infosec.mozilla.org/guidelines/openssh
     storeconfigs_enabled => false,
+    validate_sshd_file   => true,
     options              => {
       'UsePAM'                          => 'yes',
       'AddressFamily'                   => 'any',
@@ -52,16 +54,18 @@ class g_server::services::ssh(
 
       'ChallengeResponseAuthentication' => 'no',
       'PasswordAuthentication'          => 'no',
-      'PermitRootLogin'                 => 'without-password',
+      'PermitRootLogin'                 => 'no',
       'Port'                            => $ports,
 
-      'Subsystem'                       => "sftp  ${sftp_path}",
+      'Subsystem'                       => "sftp  ${sftp_path} -f AUTHPRIV -l INFO",
       'AllowGroups'                     => [$group],
       'AcceptEnv'                       => join($accept_env, ' '),
       'Ciphers'                         => join($ciphers, ','),
       'MACs'                            => join($macs, ','),
       'KexAlgorithms'                   => join($kex_algorithms, ','),
       'X11Forwarding'                   => 'no',
+      'LogLevel'                        => 'VERBOSE',
+      'UsePrivilegeSeparation'          => 'sandbox'
     }
   }
 
