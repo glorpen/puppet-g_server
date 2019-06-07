@@ -1,5 +1,5 @@
 define g_server::network::tuntap(
-  Enum ['present', 'absent'] $ensure = 'present',
+  Enum['present', 'absent'] $ensure = 'present',
   $ipv4addr = undef,
   $ipv4netmask = undef,
   $ipv6addr = undef,
