@@ -2,7 +2,8 @@ define g_server::volumes::group (
   Array[String] $devices,
   String $vg_name = $title,
   Hash $volumes = {},
-  Hash $thin_pools = {}
+  Hash $thin_pools = {},
+  Hash $raids = {}
 ){
   $devices.each | $device | {
     physical_volume { $device:
@@ -18,4 +19,5 @@ define g_server::volumes::group (
 
   create_resources(g_server::volumes::vol, $volumes, {'vg_name' => $vg_name})
   create_resources(g_server::volumes::thinpool, $thin_pools, {'vg_name' => $vg_name})
+  create_resources(g_server::volumes::raid, $raids, {'vg_name' => $vg_name})
 }
