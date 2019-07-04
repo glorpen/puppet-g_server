@@ -9,8 +9,8 @@ define g_server::volumes::vol (
   String $mount_options = 'noatime,nodiratime',
   Integer $pass = 0,
   Optional[String] $thinpool = undef,
-  Optional[String] $mountpoint_user = undef,
-  Optional[String] $mountpoint_group = undef,
+  Variant[String,Integer,Undef] $mountpoint_user = undef,
+  Variant[String,Integer,Undef] $mountpoint_group = undef,
   Optional[String] $mountpoint_mode = undef,
   Boolean $manage_mountpoint = true
 ){
@@ -32,7 +32,7 @@ define g_server::volumes::vol (
     pass              => $pass,
     thinpool          => $_thinpool
   }
-  
+
   g_server::volumes::mountpoint{ $mountpoint:
       ensure => $ensure,
       user   => $mountpoint_user,

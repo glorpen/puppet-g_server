@@ -1,8 +1,8 @@
 define g_server::volumes::mountpoint(
   String $ensure,
   String $mountpoint = $name,
-  Optional[String] $user = undef,
-  Optional[String] $group = undef,
+  Variant[String,Integer,Undef] $user = undef,
+  Variant[String,Integer,Undef] $group = undef,
   Optional[String] $mode = undef,
   Boolean $manage = true
 ){
@@ -23,11 +23,11 @@ define g_server::volumes::mountpoint(
         group   => $group,
         mode    => $mode
       }
-      if $user {
+      if $user=~String {
         User[$user]
         -> File[$mountpoint]
       }
-      if $group and $group != $user {
+      if $group=~String and $group != $user {
         Group[$group]
         -> File[$mountpoint]
       }
