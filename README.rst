@@ -17,7 +17,14 @@ You can specify which interfaces are external and which internal.
 
 Other modules/classes can use this information to eg. listen on only some interfaces or create firewall rules.
 
-Configurable in ``g_server`` parameters.
+Configurable as ``g_server`` parameters.
+
+Usage:
+
+.. code-block:: puppet
+
+  g_server::get_interfaces($side).each | $iface | { }
+  g_server::get_side($iface) # => one of G_server::Side
 
 -------
 Classes
@@ -133,6 +140,7 @@ Supports managing:
 - thin provisioned volumes
 - filesystems with options
 - mountpoints (with chmod/chown)
+- lvm raids
 
 Hiera usage
 -----------

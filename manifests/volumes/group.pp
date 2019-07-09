@@ -1,3 +1,15 @@
+# @summary Manages LVM volume group.
+#
+# @param devices
+#   Block devices to use for this VG.
+# @param vg_name
+#   Name of LVM VG to use.
+# @param volumes
+#   Creates volumes with g_server::volumes::vol type.
+# @param thin_pools
+#   Creates thinly provisioned pools (not volumes) with g_server::volumes::thinpool type.
+# @param raids
+#   Creates lvm raids with g_server::volumes::raid type.
 define g_server::volumes::group (
   Array[String] $devices,
   String $vg_name = $title,

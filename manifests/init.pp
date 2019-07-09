@@ -1,7 +1,4 @@
-# Define: g_server
-#
-# Setups server in opinionated way.
-#
+# @summary Setups server in opinionated way.
 class g_server (
   # TODO: move to g_server::network
   Array $external_ifaces = [],
