@@ -27,14 +27,14 @@ define g_server::volumes::mountpoint(
         User[$user]
         -> File[$mountpoint]
       }
-      if $group=~String and $group != $user {
+      if $group=~String {
         Group[$group]
         -> File[$mountpoint]
       }
     }
 
-    # File[$mountpoint]
-    # ->Mount[$mountpoint]
+    File[$mountpoint]
+    ->Mount[$mountpoint]
   } else {
     # fix for puppetlabs-lvm
     Exec <| title=="ensure mountpoint '${mountpoint}' exists" |> {

@@ -36,3 +36,9 @@ fixtures:
     "ssh":
       repo: "git://github.com/saz/puppet-ssh.git"
       ref:  "v5.0.0"
+    "lvm":
+      repo: "git://github.com/puppetlabs/puppetlabs-lvm.git"
+      ref:  "v1.3.0"
+    "mount_core":
+      repo: "git://github.com/puppetlabs/puppetlabs-mount_core.git"
+      ref:  "1.0.3"
