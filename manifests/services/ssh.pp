@@ -16,7 +16,8 @@ class g_server::services::ssh(
   Array[String] $accept_env = [
     'LANG', 'LC_CTYPE', 'LC_NUMERIC', 'LC_TIME', 'LC_COLLATE', 'LC_MONETARY', 'LC_MESSAGES', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS',
     'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION', 'LC_ALL LANGUAGE', 'XMODIFIERS'
-  ]
+  ],
+  Boolean $password_authentication = true
 ){
   include ::g_server
 
@@ -69,10 +70,14 @@ class g_server::services::ssh(
     }
   }
 
+  $_password_auth = $password_authentication?{
+    true => 'yes',
+    default => 'no'
+  }
   ssh::server::match_block { "Group ${group}":
     type    => '',
     options => {
-      'PasswordAuthentication' => 'yes',
+      'PasswordAuthentication' => $_password_auth,
       'AllowTcpForwarding'     => 'yes',
       'X11Forwarding'          => 'yes',
     }
