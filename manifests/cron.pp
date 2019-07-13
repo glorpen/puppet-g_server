@@ -19,7 +19,7 @@ class g_server::cron (
 
   class { '::cron':
     manage_package => true,
-    *              => delete_undef_values(merge($_defaults, $_user_opts)),
+    *              => merge($_defaults, delete_undef_values($_user_opts)),
   }
   create_resources(g_server::cron::job, $jobs)
 }
