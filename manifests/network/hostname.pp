@@ -5,7 +5,7 @@ class g_server::network::hostname(
     'Gentoo': {
       ensure_resource('service', 'hostname', {
         'ensure'  => 'running',
-        'enabled' => true
+        'enable' => true
       })
 
       file { '/etc/conf.d/hostname':
@@ -14,6 +14,8 @@ class g_server::network::hostname(
       ~>Service['hostname']
     }
     default: {
+      ensure_packages(['hostname'], { ensure => 'present' })
+
       file { '/etc/hostname':
         content => "${hostname}\n",
       }
