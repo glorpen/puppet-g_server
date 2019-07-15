@@ -17,7 +17,9 @@ class g_server::services::ssh(
     'LANG', 'LC_CTYPE', 'LC_NUMERIC', 'LC_TIME', 'LC_COLLATE', 'LC_MONETARY', 'LC_MESSAGES', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS',
     'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION', 'LC_ALL LANGUAGE', 'XMODIFIERS'
   ],
-  Boolean $password_authentication = true
+  Boolean $password_authentication = true,
+  Boolean $x11_forwarding = false,
+  Hash $server_options = {}
 ){
   include ::g_server
 
@@ -37,7 +39,13 @@ class g_server::services::ssh(
     default => '/usr/libexec/openssh/sftp-server'
   }
 
-  $ssh_options = {}
+  if $::facts['ssh_server_version_release'] and SemVer("${::facts['ssh_server_version_release']}.0") < SemVer('7.5.0') {
+    $ssh_options = {
+      'UsePrivilegeSeparation' => 'sandbox'
+    }
+  } else {
+    $ssh_options = {}
+  }
 
   group { $group:
     ensure => 'present',
@@ -47,11 +55,11 @@ class g_server::services::ssh(
     # https://infosec.mozilla.org/guidelines/openssh
     storeconfigs_enabled => false,
     validate_sshd_file   => true,
-    options              => {
+    options              => merge({
       'UsePAM'                          => 'yes',
       'AddressFamily'                   => 'any',
       'SyslogFacility'                  => 'AUTHPRIV',
-      'GSSAPIAuthentication'            => 'yes',
+      #'GSSAPIAuthentication'            => 'yes',
 
       'ChallengeResponseAuthentication' => 'no',
       'PasswordAuthentication'          => 'no',
@@ -66,11 +74,14 @@ class g_server::services::ssh(
       'KexAlgorithms'                   => join($kex_algorithms, ','),
       'X11Forwarding'                   => 'no',
       'LogLevel'                        => 'VERBOSE',
-      'UsePrivilegeSeparation'          => 'sandbox'
-    }
+    }, $ssh_options, $server_options)
   }
 
   $_password_auth = $password_authentication?{
+    true => 'yes',
+    default => 'no'
+  }
+  $_x11_forwarding = $x11_forwarding?{
     true => 'yes',
     default => 'no'
   }
@@ -79,7 +90,7 @@ class g_server::services::ssh(
     options => {
       'PasswordAuthentication' => $_password_auth,
       'AllowTcpForwarding'     => 'yes',
-      'X11Forwarding'          => 'yes',
+      'X11Forwarding'          => $_x11_forwarding,
     }
   }
 
