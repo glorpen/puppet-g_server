@@ -1,6 +1,6 @@
 {
   "name": "glorpen-g_server",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "author": "Arkadiusz Dzięgiel",
   "summary": "Bits and pieces to configure base of your servers in opinionated way with power of Puppet",
   "license": "GPL-3.0",
