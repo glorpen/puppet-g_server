@@ -3,7 +3,9 @@ class g_server::accounts (
   Hash $root_ssh_keys = {},
   Hash $root_ssh_authorized_keys = {},
   $admin_groups = ['wheel'],
-  Hash $users = {}
+  Hash $users = {},
+  Variant[Boolean, String] $root_selinux_role = 'sysadm_r',
+  Variant[Boolean, String] $root_selinux_type = 'sysadm_t',
 ){
 
   g_server::accounts::user { 'root':
@@ -15,6 +17,10 @@ class g_server::accounts (
     ssh_authorized_keys => $root_ssh_authorized_keys,
 
     admin               => false
+  }
+
+  if ($root_selinux_role == true or $root_selinux_type == true) {
+    fail('Selinux role and type can be false or string.')
   }
 
   create_resources(g_server::accounts::user, $users)

@@ -84,9 +84,19 @@ define g_server::accounts::user(
   }
 
   if $::g_server::manage_sudo and $admin {
-    $_selinux_opts = $::facts['os']['selinux']['enabled'] ? {
-      true    => 'ROLE="sysadm_r" TYPE="sysadm_t" ',
-      default => ' '
+    if $::facts['os']['selinux']['enabled'] {
+      $_selinux_opts = join(delete_undef_values([
+        $::g_server::accounts::root_selinux_role?{
+          false => undef,
+          default => "ROLE=\"${::g_server::accounts::root_selinux_role}\" "
+        },
+        $::g_server::accounts::root_selinux_role?{
+          false => undef,
+          default => "TYPE=\"${::g_server::accounts::root_selinux_type}\" ",
+        }
+      ]), '')
+    } else {
+      $_selinux_opts = ''
     }
     sudo::conf { "g_server-admin-${username}":
       content => "${username} ALL=(ALL) ${_selinux_opts}ALL"
