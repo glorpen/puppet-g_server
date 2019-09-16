@@ -15,6 +15,7 @@ class g_server (
   Boolean $manage_cron = true,
   Variant[Boolean, Hash, Undef] $manage_accounts = undef,
   Variant[Boolean, Hash, Undef] $manage_volumes = undef,
+  Variant[Boolean, Hash, Undef] $manage_ntp = undef,
   Boolean $default_packages = true
 ) {
 
@@ -68,6 +69,14 @@ class g_server (
 
   if $manage_cron {
     contain ::g_server::cron
+  }
+
+  if $manage_ntp == true {
+    contain ::g_server::services::ntp
+  } elsif $manage_ntp =~ Hash {
+    class { 'g_server::services::ntp':
+      * => $manage_ntp
+    }
   }
 
   if $hostname {
