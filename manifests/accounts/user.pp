@@ -8,6 +8,7 @@ define g_server::accounts::user(
   Optional[String] $password_hash = undef,
   String $shell = '/bin/bash',
   Boolean $ssh_login = true,
+  Optional[String] $comment = undef,
 ){
   include ::stdlib
   include ::g_server
@@ -80,7 +81,8 @@ define g_server::accounts::user(
     managehome     => true,
     purge_ssh_keys => true,
     password       => $password_hash,
-    shell          => $shell
+    shell          => $shell,
+    comment        => $comment
   }
 
   if $::g_server::manage_sudo and $admin {
