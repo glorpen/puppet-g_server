@@ -1,4 +1,5 @@
 class g_server::repos(
+  $puppet = false
 ){
 
   include ::stdlib
@@ -9,10 +10,14 @@ class g_server::repos(
     }
     'Centos': {
       class { 'yum': }
-      class { 'g_server::repos::puppet': }
+      if $puppet {
+        class { 'g_server::repos::puppet': }
+      }
     }
     'Fedora': {
-      class { 'g_server::repos::puppet': }
+      if $puppet {
+        class { 'g_server::repos::puppet': }
+      }
     }
     default: {}
   }
