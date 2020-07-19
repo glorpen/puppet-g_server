@@ -1,6 +1,7 @@
 class g_server::services::ntp(
   G_server::Side $side = 'none',
-  Array[String] $servers = ['pool.ntp.org']
+  Array[String] $servers = [],
+  Array[String] $pools = ['pool.ntp.org']
 ){
   include ::g_server
 
@@ -15,18 +16,14 @@ class g_server::services::ntp(
     }
   }
 
-  $_restrict = $side?{
-    'none' => [ # localhost only
-      'default kod notrap nomodify nopeer noquery limited',
-      '127.0.0.1',
-      '[::1]',
-      'source notrap nomodify noquery',
-    ],
-    default => fail("NTP server on ${side} side is not yet supported")
+  $queryhosts = $side?{
+    'none'  => [], # localhost only
+    default => ['']
   }
 
-  class { 'ntp':
-    servers  => $servers,
-    restrict => $_restrict
+  class { 'chrony':
+    servers    => $servers,
+    pools      => $pools,
+    queryhosts => $queryhosts
   }
 }
