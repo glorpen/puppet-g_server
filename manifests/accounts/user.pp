@@ -1,5 +1,6 @@
 define g_server::accounts::user(
   String $username = $title,
+  Enum['present','absent'] $ensure = 'present',
   Hash $ssh_authorized_keys = {},
   Hash $ssh_keys = {},
   Boolean $admin = false,
@@ -14,6 +15,15 @@ define g_server::accounts::user(
   include ::g_server
   include ::g_server::accounts
 
+  $ensure_directory = $ensure?{
+    'present' => 'directory',
+    default => 'absent'
+  }
+  $ensure_file = $ensure?{
+    'present' => 'file',
+    default => 'absent'
+  }
+
   if $admin {
     $base_groups = concat($groups, $::g_server::accounts::admin_groups)
   } else {
@@ -27,7 +37,7 @@ define g_server::accounts::user(
 
   User[$username]
   ->file {"${_home}/.ssh":
-    ensure => 'directory',
+    ensure => $ensure_directory,
     owner  => $username,
     group  => $username,
     mode   => '0700'
@@ -37,12 +47,13 @@ define g_server::accounts::user(
 
     include ::g_server::services::ssh
 
-    if $ssh_authorized_keys {
+    if $ssh_authorized_keys and $ensure == 'present' {
       $ssh_authorized_keys.each | $place, $key | {
         ssh_authorized_key { "${username}@${place}":
-          user => $username,
-          type => 'ssh-rsa',
-          key  => $key,
+          ensure => 'present',
+          user   => $username,
+          type   => 'ssh-rsa',
+          key    => $key,
         }
       }
     }
@@ -56,7 +67,7 @@ define g_server::accounts::user(
   if $ssh_keys {
     $ssh_keys.each | $k, $v | {
       file {"${_home}/.ssh/id_${k}.pub":
-        ensure  => 'file',
+        ensure  => $ensure_file,
         owner   => $username,
         group   => $username,
         mode    => '0644',
@@ -64,7 +75,7 @@ define g_server::accounts::user(
         content => $v['public_key_content'],
       }
       file {"${_home}/.ssh/id_${k}":
-        ensure  => 'file',
+        ensure  => $ensure_file,
         owner   => $username,
         group   => $username,
         mode    => '0600',
@@ -75,7 +86,7 @@ define g_server::accounts::user(
   }
 
   user { $username:
-    ensure         => 'present',
+    ensure         => $ensure,
     home           => $_home,
     groups         => $_groups,
     managehome     => true,
@@ -101,6 +112,7 @@ define g_server::accounts::user(
       $_selinux_opts = ''
     }
     sudo::conf { "g_server-admin-${username}":
+      ensure  => $ensure,
       content => "${username} ALL=(ALL) ${_selinux_opts}ALL"
     }
   }
