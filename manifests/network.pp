@@ -13,10 +13,12 @@ class g_server::network(
   String $internal_tld = 'internal',
   Array $additional_hosts = [],
   Hash[String, Optional[Hash]] $interfaces = {},
-  Boolean $enable_macvlan = false
+  Boolean $enable_macvlan = false,
+  Boolean $collect_public_hosts = true
 ){
 
   $internal_hostname = "${::facts['networking']['hostname']}.${internal_tld}"
+  $iface_public_scope = 'public'
 
   case $::osfamily {
     'Gentoo': {
@@ -57,5 +59,9 @@ class g_server::network(
         source => "puppet:///modules/g_server/network-scripts/${f}"
       }
     }
+  }
+
+  if $collect_public_hosts {
+    Hosts::Host <<| tag == $iface_public_scope |>>
   }
 }

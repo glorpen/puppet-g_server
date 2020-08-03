@@ -21,7 +21,7 @@ define g_server::network::iface(
     table => Optional[String]
   }]] $routes = [],
   Array[String, 0, 2] $nameservers = [],
-  Boolean $collect_exported_resources = true
+  Boolean $collect_internal_hosts = true
 ){
   include g_server
   include g_server::network
@@ -35,7 +35,7 @@ define g_server::network::iface(
 
   $local_tag = $side ? {
     'internal' => $scope,
-    default => 'public'
+    default => $::g_server::network::iface_public_scope
   }
 
   if $ipv6addr != undef {
@@ -138,12 +138,8 @@ define g_server::network::iface(
     }
   }
 
-  if $collect_exported_resources {
-    if $side == 'internal' {
-      Hosts::Host <<| tag == $scope |>>
-    } else {
-      Hosts::Host <<| tag == 'public' |>>
-    }
+  if $collect_internal_hosts and $side == 'internal' {
+    Hosts::Host <<| tag == $scope |>>
   }
 
   if (! $routes.empty()) {
