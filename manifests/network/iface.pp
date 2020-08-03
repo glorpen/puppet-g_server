@@ -20,7 +20,8 @@ define g_server::network::iface(
     source => Optional[Stdlib::IP::Address::Nosubnet],
     table => Optional[String]
   }]] $routes = [],
-  Array[String, 0, 2] $nameservers = []
+  Array[String, 0, 2] $nameservers = [],
+  Boolean $collect_exported_resources = true
 ){
   include g_server
   include g_server::network
@@ -137,14 +138,15 @@ define g_server::network::iface(
     }
   }
 
-  if $side == 'internal' {
-    Hosts::Host <<| tag == $scope |>>
-  } else {
-    Hosts::Host <<| tag == 'public' |>>
+  if $collect_exported_resources {
+    if $side == 'internal' {
+      Hosts::Host <<| tag == $scope |>>
+    } else {
+      Hosts::Host <<| tag == 'public' |>>
+    }
   }
 
   if (! $routes.empty()) {
-
     $routes_auto = $routes.reduce({
       'family' => [],
       'cidr' => [],
