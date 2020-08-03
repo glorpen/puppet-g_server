@@ -1,6 +1,8 @@
 class g_server::volumes (
   Hash $groups = {}
 ){
-  contain ::lvm
+  class { 'lvm':
+    manage_pkg => true
+  }
   create_resources(g_server::volumes::group, $groups)
 }
