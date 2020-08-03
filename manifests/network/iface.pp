@@ -11,6 +11,7 @@ define g_server::network::iface(
   Optional[String] $macvlan_parent = undef,
   Optional[String] $mac_addr = undef,
   Boolean $dns = true,
+  Optional[Integer] $mtu = undef,
   Array[Struct[{
     ipaddress => Stdlib::IP::Address::Nosubnet,
     cidr => Variant[Integer, Stdlib::IP::Address::Nosubnet],
@@ -133,6 +134,7 @@ define g_server::network::iface(
         bootproto      => $bootproto,
         enable_dhcp    => $enable_dhcp,
         description    => " \n${_desc_mac}${_desc_macvlan}",
+        mtu            => $mtu,
         *              => merge($_device_opts, $_vlan_opts, $_dns_options)
       }
     }
