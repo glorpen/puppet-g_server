@@ -34,7 +34,7 @@ define g_server::network::iface(
   }
 
   $local_tag = $side ? {
-    'internal' => $scope,
+    'internal' => "${::g_server::network::tag_prefix}${scope}",
     default => $::g_server::network::iface_public_scope
   }
 
@@ -139,7 +139,7 @@ define g_server::network::iface(
   }
 
   if $collect_internal_hosts and $side == 'internal' {
-    Hosts::Host <<| tag == $scope |>>
+    Hosts::Host <<| tag == $local_tag |>>
   }
 
   if (! $routes.empty()) {

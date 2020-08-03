@@ -18,7 +18,8 @@ class g_server::network(
 ){
 
   $internal_hostname = "${::facts['networking']['hostname']}.${internal_tld}"
-  $iface_public_scope = 'public'
+  $tag_prefix = 'g_server.network.scope.'
+  $iface_public_scope = "${tag_prefix}.public"
 
   case $::osfamily {
     'Gentoo': {
