@@ -46,11 +46,24 @@ define g_server::network::iface(
       tag     => $local_tag
     }
   }
-  if $ipv4addr != undef {
-    @@hosts::host { "${::trusted['certname']}.${name}.ipv4":
-      aliases => $export_hostname,
-      ip      => $ipv4addr,
-      tag     => $local_tag
+
+  if $ipv4addr != undef or $ipv4dhcp {
+    if $ipv4dhcp {
+      if $name in $::facts['networking']['interfaces'] {
+        $current_ipv4addr = $::facts['networking']['interfaces'][$name]['ip']
+      } else {
+        $current_ipv4addr = undef
+      }
+    } else {
+      $current_ipv4addr = $ipv4addr
+    }
+
+    if $current_ipv4addr {
+      @@hosts::host { "${::trusted['certname']}.${name}.ipv4":
+        aliases => $export_hostname,
+        ip      => $current_ipv4addr,
+        tag     => $local_tag
+      }
     }
   }
 
