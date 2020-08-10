@@ -17,7 +17,8 @@ class g_server::network(
   Boolean $collect_public_hosts = true
 ){
 
-  $internal_hostname = "${::facts['networking']['hostname']}.${internal_tld}"
+  $_short_hostname = regsubst($::g_server::hostname, '\..*', '')
+  $internal_hostname = "${_short_hostname}.${internal_tld}"
   $tag_prefix = 'g_server.network.scope.'
   $iface_public_scope = "${tag_prefix}.public"
 
