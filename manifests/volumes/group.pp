@@ -20,13 +20,12 @@ define g_server::volumes::group (
   $devices.each | $device | {
     physical_volume { $device:
         ensure => present,
-        #unless_vg => $vg_name
+        force  => true
     }
   }
   volume_group { $vg_name:
     ensure           => present,
-    physical_volumes => $devices,
-    #createonly => true
+    physical_volumes => $devices
   }
 
   create_resources(g_server::volumes::vol, $volumes, {'vg_name' => $vg_name})
